@@ -15,7 +15,7 @@ ometa WordpicScanner {
   obj_decln = name:obj ":" objtype:typ attrs?:attrs-> [`object, obj, typ, [`attrs, attrs]],
   rel_decln = name:opd1 opr:op name:opd2 -> [op, opd1, opd2],
   
-  objtype = "box" | "circle",
+  objtype = "box" | "square" | "rect" | "circle" | "oval" | "arc" | "image" | "point" | "link" | "line",
   attrs = "[" listOf('nvpair',","):a "]" -> a,
 
   opr = ">" | "<",
@@ -42,13 +42,44 @@ WordpicScanner.matchAll('ab:box [attrs]','simple_statement');
 //WordpicScanner.matchAll('ab:box','simple_statement');
 //WordpicScanner.matchAll('ab > cd','simple_statement');
 
+// added handy debugging tool from here:http://vpri.org/pipermail/ometa/2010-May/000281.html
+// the sample below can currently be broken by adding a non-letter, non-digit char to any text to see this in action.
+
+matchFailed = function (grammar, errorPos) {
+  var lines = grammar.input.lst.split('\n');
+  var pos = 0, l = 0;
+  var msg = ["Execution error: input matching failed at position: " + errorPos];
+
+  while (pos < errorPos) {
+    var line = lines[l], length = line.length;
+    if (pos + length >= errorPos) {
+      var c = errorPos - pos;
+      msg.push("  line:" + (l + 1) + ", column:" + c);
+      msg.push(line)
+      // replicate str n times
+      function replicate(str, n) {
+        if (n < 1) return "";
+        var t = [];
+        for (var i=0; i<n; i++) t.push(str);
+        return t.join('');
+      }
+      msg.push(replicate('-', c) + '^');
+    }
+    pos += length + 1;
+    l++;
+  }
+  alert(msg.join('\n'));
+}
+
+
 WordpicScanner.matchAll("picture abc {
 object blah {
   foo : box //test comment 
-  c1 : circle [attr1=foo,attr2=bar] 
+  c_1 : circle [attr1=foo,attr2=bar] 
   bleh > foo
   /* another comment
    that spans lines
   */
 } 
-}",'wordpic');
+}",'wordpic',[],matchFailed);
+ undefined undefined
