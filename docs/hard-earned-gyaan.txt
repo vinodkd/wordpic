@@ -17,3 +17,9 @@ wp.match('blah','name');
 moral of the story: use matchAll to parse into tokens, then use match to parse the tokenized stream (or graph of objects)
 
 tbd: determine which functions in parser.js works on string and which on objects.
+
+other tips:
+- when a change breaks a working grammar, try running one of the lower level rules instead of the root one. Ometa's "Oops, match failed" is not a useful enough tool.
+- define a text or string rule and use that as the start of your grammar exploration. let this be your default RHS for any rule and refine from there.
+  - pitfall: string works on strings of objects, and treats all javascript strings as arrays of char objects. so define a string rule of your own that will work with matchall.
+  
