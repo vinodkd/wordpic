@@ -12,10 +12,10 @@ ometa WordpicScanner {
   objdefbody = simple_statement+,
 
   // docs dont talk about the ? operator, mail archive does: http://vpri.org/pipermail/ometa/2010-April/000242.html
-  obj_decln = name:obj ":" objtype:typ attrs?:attrs-> [`object, obj, typ, [`attrs, attrs]],
+  obj_decln = (name:name ":")? objtype:typ attrs?:attrs-> [`object, typ, name, [`attrs, attrs]],
   rel_decln = name:opd1 opr:op name:opd2 -> [op, opd1, opd2],
   
-  objtype = "box" | "square" | "rect" | "circle" | "oval" | "arc" | "image" | "point" | "link" | "line",
+  objtype = "box" | "square" | "rect" | "circle" | "oval" | "arc" | "image" | "point" | "link" | "line" | nqstring,
   attrs = "[" listOf('nvpair',","):a "]" -> a,
 
   opr = ">" | "<",
@@ -27,7 +27,7 @@ ometa WordpicScanner {
   space = ^space |fromTo('//','\n') | fromTo('/*','*/'), 
   
   qstring = fromTo('"','"'),
-  nqstring = ('_' | letterOrDigit)+:ls -> (ls.join(''))
+  nqstring = ('_' | '.' | letterOrDigit)+:ls -> (ls.join(''))
 }
 /*
 WordpicScanner.matchAll("picture bleh {
@@ -72,13 +72,24 @@ matchFailed = function (grammar, errorPos) {
 }
 
 
-WordpicScanner.matchAll("picture abc {
-object blah {
-  foo : box //test comment 
-  c_1 : circle [attr1=foo,attr2=bar] 
-  bleh > foo
-  /* another comment
-   that spans lines
-  */
-} 
-}",'wordpic',[],matchFailed);
+WordpicScanner.matchAll("picture \"Three tier arch\" {
+          // todo: think of a better name than object. this is the exemplar object that you instantiate for your picture.
+          object cylinder{
+            bot:arc
+            top:oval  
+        
+            top > bot
+            
+            lt:line[from=top.e,to=bot.e]
+            rt:line[from=top.w,to=bot.w]
+          }
+          
+          client:box[color=green] //default label is the name.
+          server:box[color=blue]
+          db:cylinder[color=red]
+          
+          l1:link[from=client,to=server]
+          link[from=server,to=db]
+          // also can be written as
+          // client -- server -- db
+        }",'wordpic',[],matchFailed);
