@@ -40,7 +40,7 @@ ometa WordpicScanner {
   obj_decln = name:obj ":" objtype:typ attrs?:attrs-> [`object, obj, typ, attrs],
   rel_decln = name:opd1 opr:op name:opd2 -> [op, opd1, opd2],
   objtype = "box" | "circle",
-  attrs = "[" text:a "]" -> a,
+  attrs = "[" listOf('nvpair',","):a "]" -> a,
 
   opr = ">" | "<",
   nvpair = text,
@@ -48,7 +48,7 @@ ometa WordpicScanner {
   text = spaces (qstring | nqstring):s ->s,
   space = ^space |fromTo('//','\n') | fromTo('/*','*/'), //this takes care of comments too. copied from bs-ometa-compiler.txt
   qstring = fromTo('"','"'),
-  nqstring = letter+:ls -> (ls.join(''))
+  nqstring = letterOrDigit+:ls -> (ls.join(''))
 }
 /*
 WordpicScanner.matchAll("picture bleh {
@@ -66,7 +66,7 @@ WordpicScanner.matchAll('ab:box [attrs]','simple_statement');
 WordpicScanner.matchAll("picture abc {
 object blah {
   foo : box //test comment 
-  c : circle [atr] 
+  c1 : circle [attr1,attr2] 
   bleh > foo
   /* another comment
    that spans lines
