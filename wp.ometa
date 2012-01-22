@@ -27,7 +27,7 @@ ometa WordpicScanner {
   space = ^space |fromTo('//','\n') | fromTo('/*','*/'), 
   
   qstring = fromTo('"','"'),
-  nqstring = letterOrDigit+:ls -> (ls.join(''))
+  nqstring = ('_' | letterOrDigit)+:ls -> (ls.join(''))
 }
 /*
 WordpicScanner.matchAll("picture bleh {
@@ -82,4 +82,3 @@ object blah {
   */
 } 
 }",'wordpic',[],matchFailed);
- undefined undefined
