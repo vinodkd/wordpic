@@ -25,6 +25,7 @@ blah */','multicomment');
 */
 
 // this works. see hard-earned-gyaan.txt
+
 ometa WordpicScanner {
 /**/
   wordpic = "picture" name:n "{" statements:s "}" -> [`wordpic,n,s],
@@ -40,7 +41,7 @@ ometa WordpicScanner {
   relation = text:r -> [`relation,r],
 
   text = spaces (qstring | nqstring):s ->s,
-  space = ^space |fromTo('//','\n') | fromTo('/*','*/'),
+  space = ^space |fromTo('//','\n') | fromTo('/*','*/'), //this takes care of comments too. copied from bs-ometa-compiler.txt
   qstring = fromTo('"','"'),
   nqstring = letter+:ls -> (ls.join(''))
 }
