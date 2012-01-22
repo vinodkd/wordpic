@@ -1,0 +1,42 @@
+/*
+ometa Wordpic {
+   identifier = <string>,
+   text = <string>,
+   objname = identifier,
+   instname = identifier,
+   opr = ">" | "<",
+   multicomment = "/*" text "\n"+ "*/",
+   linecomment = "//" text "\n",
+   comment = linecomment | multicomment,
+   relation = instname opr instname [comment],
+   objinst = instname ":" objname [comment]"\n",
+   objdefbody = simplestatement*,
+   simplestatement = objinst | relation | comment,
+   objdef = "object" objname "{" objdefbody "}",
+   statement = objdef | simplestatment,
+   picbody = statement*,
+   picture = "picture" picname:pn "{" picbody "}"
+
+}
+
+Wordpic.match('/* test
+blah */','multicomment');
+
+*/
+
+// this works. see hard-earned-gyaan.txt
+
+ometa WordpicScanner {
+  wordpic = "picture" name:n "{" statements:s "}" -> [n,s],
+  name = text,
+  statements = statement+:s -> [s],
+  statement = text,
+  text = spaces (qstring | nqstring),
+  qstring = fromTo('"','"'),
+  nqstring = letter+:ls -> (ls.join(''))
+}
+
+// WordpicScanner.matchAll('abcd','text');
+// WordpicScanner.matchAll('abcd','statements');
+// WordpicScanner.matchAll('abcd','name');
+WordpicScanner.matchAll('picture "abc def" { blah }','wordpic');

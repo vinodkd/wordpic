@@ -1,0 +1,19 @@
+
+ometa wp {
+   picture = "picture",
+   name = string:n -> (alert("name:"+n)),
+   stmts = string
+}
+
+// this works because its matching a stringorArrayLikeObject ie a string of letters with a rule
+wp.matchAll('picture','picture')
+// this still works because its matching an object (String) with a rule, and the defn of picture still is ok
+//wp.match('picture ','name');
+// this returns only the first char as matched with name because matchAll works on an array of chars, and each char is still a valid string
+//wp.matchAll('blah','name');
+// this returns the whole string because match works on an object, ie the entire string of chars
+wp.match('blah','name');
+
+moral of the story: use matchAll to parse into tokens, then use match to parse the tokenized stream (or graph of objects)
+
+tbd: determine which functions in parser.js works on string and which on objects.
