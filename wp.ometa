@@ -32,7 +32,8 @@ ometa WordpicScanner {
   name = text,
   statements = statement+:s -> s,
   statement = objdef | simple_statement,
-  objdef = text:od -> [`objdef,od],
+  objdef = "object" name:name "{" objdefbody:body "}" -> [`object,name,body],
+  objdefbody = statements,
   simple_statement = text:s -> [`sstmt,s],
   text = spaces (qstring | nqstring):s ->s,
   qstring = fromTo('"','"'),
@@ -42,4 +43,9 @@ ometa WordpicScanner {
 // WordpicScanner.matchAll('abcd','text');
 // WordpicScanner.matchAll('abcd','statements');
 // WordpicScanner.matchAll('abcd','name');
-WordpicScanner.matchAll('picture "abc def" { blah bleh }','wordpic'); 
+WordpicScanner.matchAll('picture "abc def" { 
+object blah {
+  foo
+} 
+bleh 
+}','wordpic');
