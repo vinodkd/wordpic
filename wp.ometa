@@ -25,17 +25,22 @@ blah */','multicomment');
 */
 
 // this works. see hard-earned-gyaan.txt
-
 ometa WordpicScanner {
 /**/
   wordpic = "picture" name:n "{" statements:s "}" -> [`wordpic,n,s],
   name = text,
   statements = statement+:s -> s,
+
   statement = objdef | simple_statement,
   objdef = "object" name:name "{" objdefbody:body "}" -> [`object,name,body],
-  objdefbody = statements,
-  simple_statement = text:s -> [`sstmt,s],
+  simple_statement = objinst | relation,
+
+  objdefbody = simple_statement+,
+  objinst = name:instname ":" name:objname -> [`objinst, instname, objname],
+  relation = text:r -> [`relation,r],
+
   text = spaces (qstring | nqstring):s ->s,
+  space = ^space |fromTo('//','\n') | fromTo('/*','*/'),
   qstring = fromTo('"','"'),
   nqstring = letter+:ls -> (ls.join(''))
 }
@@ -43,9 +48,19 @@ ometa WordpicScanner {
 // WordpicScanner.matchAll('abcd','text');
 // WordpicScanner.matchAll('abcd','statements');
 // WordpicScanner.matchAll('abcd','name');
+
 WordpicScanner.matchAll('picture "abc def" { 
+
+
 object blah {
-  foo
+  foo : box //test comment 
+  bar
 } 
 bleh 
 }','wordpic');
+/*
+WordpicScanner.matchAll('picture Box1 {
+  box[label="A box"]
+}
+','wordpic');
+*/
