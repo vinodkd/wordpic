@@ -21,7 +21,7 @@ Status
 
 Why
 ===
-The original idea came to me from two things I was trying to do:
+The [original idea](http://tt2n.blogspot.com/2011/12/descriptive-drawing-language.html) came to me from two things I was trying to do:
 
 - Draw some simple architecture diagrams
 - Do UI mockups using Balsamiq/Visio style tools
