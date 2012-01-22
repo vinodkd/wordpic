@@ -28,7 +28,8 @@ Philosophy, Design and Syntax Ideas
   - X >> Y much_bigger  => X is 90% of grid line, Y is 10% of grid line
   - X << Y much_smaller
 - standard objects:
-  - box[type=square/rect]
+  - box alias square
+  - rect
   - circle
   - oval
   - arc
