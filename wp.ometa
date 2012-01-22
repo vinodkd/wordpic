@@ -1,33 +1,6 @@
-/*
-ometa Wordpic {
-   identifier = <string>,
-   text = <string>,
-   objname = identifier,
-   instname = identifier,
-   opr = ">" | "<",
-   multicomment = "/*" text "\n"+ "*/",
-   linecomment = "//" text "\n",
-   comment = linecomment | multicomment,
-   relation = instname opr instname [comment],
-   objinst = instname ":" objname [comment]"\n",
-   objdefbody = simplestatement*,
-   simplestatement = objinst | relation | comment,
-   objdef = "object" objname "{" objdefbody "}",
-   statement = objdef | simplestatment,
-   picbody = statement*,
-   picture = "picture" picname:pn "{" picbody "}"
-
-}
-
-Wordpic.match('/* test
-blah */','multicomment');
-
-*/
-
-// this works. see hard-earned-gyaan.txt
+// see hard-earned-gyaan.txt for all the work that went into getting this to work.
 
 ometa WordpicScanner {
-/**/
   wordpic = "picture" name:n "{" statements:s "}" -> [`wordpic,n,s],
   name = text,
   statements = statement+:s -> s,
@@ -37,9 +10,11 @@ ometa WordpicScanner {
   simple_statement = obj_decln | rel_decln,
 
   objdefbody = simple_statement+,
+
   // docs dont talk about the ? operator, mail archive does: http://vpri.org/pipermail/ometa/2010-April/000242.html
   obj_decln = name:obj ":" objtype:typ attrs?:attrs-> [`object, obj, typ, [`attrs, attrs]],
   rel_decln = name:opd1 opr:op name:opd2 -> [op, opd1, opd2],
+  
   objtype = "box" | "circle",
   attrs = "[" listOf('nvpair',","):a "]" -> a,
 
@@ -47,7 +22,10 @@ ometa WordpicScanner {
   nvpair = nqstring:name "=" text:value -> [`attr,name, value],
 
   text = spaces (qstring | nqstring):s ->s,
-  space = ^space |fromTo('//','\n') | fromTo('/*','*/'), //this takes care of comments too. copied from bs-ometa-compiler.txt
+  
+  //this takes care of comments too. copied from bs-ometa-compiler.txt
+  space = ^space |fromTo('//','\n') | fromTo('/*','*/'), 
+  
   qstring = fromTo('"','"'),
   nqstring = letterOrDigit+:ls -> (ls.join(''))
 }
