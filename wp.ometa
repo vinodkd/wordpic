@@ -33,12 +33,18 @@ ometa WordpicScanner {
   statements = statement+:s -> s,
 
   statement = objdef | simple_statement,
-  objdef = "object" name:name "{" objdefbody:body "}" -> [`object,name,body],
-  simple_statement = objinst | relation,
+  objdef = "object" name:name "{" objdefbody:body "}" -> [`objectdef,name,body],
+  simple_statement = object | relation,
 
   objdefbody = simple_statement+,
-  objinst = name:instname ":" name:objname -> [`objinst, instname, objname],
+  object = unnamed_obj | named_obj,
+  unnamed_obj = objtype:type -> [`objinst,type,"unnamed"],
+  named_obj = name:oname ":" objtype:otype -> [`objinst, otype, oname],
+  objtype = "box" | "circle",
   relation = text:r -> [`relation,r],
+  //relation = name:o1 opr:op name:o2 -> [op,o1,o2],
+
+  //opr = (">" | "<"):op -> (op),
 
   text = spaces (qstring | nqstring):s ->s,
   space = ^space |fromTo('//','\n') | fromTo('/*','*/'), //this takes care of comments too. copied from bs-ometa-compiler.txt
@@ -55,7 +61,8 @@ WordpicScanner.matchAll('picture "abc def" {
 
 object blah {
   foo : box //test comment 
-  bar
+  circle
+  bleh
   /* another comment
    that spans lines
   */
