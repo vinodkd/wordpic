@@ -37,13 +37,14 @@ ometa WordpicScanner {
   simple_statement = obj_decln | rel_decln,
 
   objdefbody = simple_statement+,
-  obj_decln = name:obj ":" objtype:typ attrs?:attrs-> [`object, obj, typ, attrs],
+  // docs dont talk about the ? operator, mail archive does: http://vpri.org/pipermail/ometa/2010-April/000242.html
+  obj_decln = name:obj ":" objtype:typ attrs?:attrs-> [`object, obj, typ, [`attrs, attrs]],
   rel_decln = name:opd1 opr:op name:opd2 -> [op, opd1, opd2],
   objtype = "box" | "circle",
   attrs = "[" listOf('nvpair',","):a "]" -> a,
 
   opr = ">" | "<",
-  nvpair = text,
+  nvpair = nqstring:name "=" text:value -> [`attr,name, value],
 
   text = spaces (qstring | nqstring):s ->s,
   space = ^space |fromTo('//','\n') | fromTo('/*','*/'), //this takes care of comments too. copied from bs-ometa-compiler.txt
@@ -66,7 +67,7 @@ WordpicScanner.matchAll('ab:box [attrs]','simple_statement');
 WordpicScanner.matchAll("picture abc {
 object blah {
   foo : box //test comment 
-  c1 : circle [attr1,attr2] 
+  c1 : circle [attr1=foo,attr2=bar] 
   bleh > foo
   /* another comment
    that spans lines
