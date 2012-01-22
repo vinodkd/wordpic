@@ -34,27 +34,42 @@ ometa WordpicScanner {
 
   statement = objdef | simple_statement,
   objdef = "object" name:name "{" objdefbody:body "}" -> [`objectdef,name,body],
-  simple_statement = name:o1 ( type_decl | rel_decl):suffix ->[suffix.op,o1,suffix.o2],
+  simple_statement = obj_decln | rel_decln,
 
   objdefbody = simple_statement+,
-  type_decl = ":" objtype:t -> {op:"typ",o2:t},
-  rel_decl = opr:op name:o2 -> {op:op,o2:o2},
+  obj_decln = name:obj ":" objtype:typ attrs?:attrs-> [`object, obj, typ, attrs],
+  rel_decln = name:opd1 opr:op name:opd2 -> [op, opd1, opd2],
   objtype = "box" | "circle",
+  attrs = "[" text:a "]" -> a,
+
   opr = ">" | "<",
+  nvpair = text,
 
   text = spaces (qstring | nqstring):s ->s,
   space = ^space |fromTo('//','\n') | fromTo('/*','*/'), //this takes care of comments too. copied from bs-ometa-compiler.txt
   qstring = fromTo('"','"'),
   nqstring = letter+:ls -> (ls.join(''))
 }
+/*
+WordpicScanner.matchAll("picture bleh {
+object blah {
+ab:box [attrs] // a comment
+xy:circle
+k > m
+}
+}",'wordpic');
+*/
+WordpicScanner.matchAll('ab:box [attrs]','simple_statement');
+//WordpicScanner.matchAll('ab:box','simple_statement');
+//WordpicScanner.matchAll('ab > cd','simple_statement');
 
-WordpicScanner.matchAll('picture "abc def" {
+WordpicScanner.matchAll("picture abc {
 object blah {
   foo : box //test comment 
-  c : circle
+  c : circle [atr] 
   bleh > foo
   /* another comment
    that spans lines
   */
 } 
-}','wordpic');
+}",'wordpic');
