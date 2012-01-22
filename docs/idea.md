@@ -52,51 +52,51 @@ Philosophy, Design and Syntax Ideas
 Sample Wordpics
 ===============
 
-picture Box1 {
-  box[label="A box"]
-}
+      picture Box1 {
+          box[label="A box"]
+        }
 
-picture Circle1{
-  circle[label="A circle",color=red,fillcolor=blue]
-}
-
-// |||ly square, arc, line
-
-picture "Three tier arch" {
-  // todo: think of a better name than object. this is the exemplar object that you instantiate for your picture.
-   object cylinder{
-    bot:arc
-    top:oval  
-
-    top above bot
-    
-    lt:line[from=top.e,to=bot.e]
-    rt:line[from=top.w,to=bot.w]
-  }
-  
-  client:box[color=green] //default label is the name.
-  server:box[color=blue]
-  db:cylinder[color=red]
-  
-  link[from=client,to=server]
-  link[from=server,to=db]
-  // also can be written as
-  // client -- server -- db
-}
-
-
-picture "Standard IDE"{
-  window{
-    menu
-    toolbar
-    "content pane":pane{
-      input: pane{
-        nav: tree -- editor: textarea
+      picture Circle1{
+          circle[label="A circle",color=red,fillcolor=blue]
+        }
         
-        nav < editor
-      }
-      output: textarea
-      input > output
-    }
-  }
-}
+        // |||ly square, arc, line
+        
+        picture "Three tier arch" {
+          // todo: think of a better name than object. this is the exemplar object that you instantiate for your picture.
+          object cylinder{
+            bot:arc
+            top:oval  
+        
+            top above bot
+            
+            lt:line[from=top.e,to=bot.e]
+            rt:line[from=top.w,to=bot.w]
+          }
+          
+          client:box[color=green] //default label is the name.
+          server:box[color=blue]
+          db:cylinder[color=red]
+          
+          link[from=client,to=server]
+          link[from=server,to=db]
+          // also can be written as
+          // client -- server -- db
+        }
+        
+
+        picture "Standard IDE"{
+          window{
+            menu
+            toolbar
+              "content pane":pane{
+                input: pane{
+                  nav: tree -- editor: textarea
+                  
+                  nav < editor
+                }
+                output: textarea
+                input > output
+              }
+            }
+          }
