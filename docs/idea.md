@@ -34,7 +34,8 @@ Philosophy, Design and Syntax Ideas
   - arc
   - image
   - point[at=loc]
-  - line[from=loc,to=loc]
+  - link[from=loc,to=loc] aka connector.
+  - line[from=loc,to=loc] regular line.
     - location is any known point on the picture, eg the picture's anchor points (see below) or any object's anchor points.
       => random points cannot be refered to. fixing this is v2.
 - standard attributes for all objects:
