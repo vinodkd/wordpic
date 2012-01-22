@@ -27,11 +27,14 @@ blah */','multicomment');
 // this works. see hard-earned-gyaan.txt
 
 ometa WordpicScanner {
-  wordpic = "picture" name:n "{" statements:s "}" -> [n,s],
+/**/
+  wordpic = "picture" name:n "{" statements:s "}" -> [`wordpic,n,s],
   name = text,
-  statements = statement+:s -> [s],
-  statement = text,
-  text = spaces (qstring | nqstring),
+  statements = statement+:s -> s,
+  statement = objdef | simple_statement,
+  objdef = text:od -> [`objdef,od],
+  simple_statement = text:s -> [`sstmt,s],
+  text = spaces (qstring | nqstring):s ->s,
   qstring = fromTo('"','"'),
   nqstring = letter+:ls -> (ls.join(''))
 }
@@ -39,4 +42,4 @@ ometa WordpicScanner {
 // WordpicScanner.matchAll('abcd','text');
 // WordpicScanner.matchAll('abcd','statements');
 // WordpicScanner.matchAll('abcd','name');
-WordpicScanner.matchAll('picture "abc def" { blah }','wordpic');
+WordpicScanner.matchAll('picture "abc def" { blah bleh }','wordpic'); 
