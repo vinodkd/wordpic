@@ -1,33 +1,44 @@
 // see hard-earned-gyaan.txt for all the work that went into getting this to work.
 
 ometa WordpicScanner {
-  wordpic = "picture" name:n "{" statements:s "}" -> [`wordpic,n,s],
+  wordpic = "picture" name:n "{" statements:s "}"         -> [`wordpic,n,s],
   name = text,
-  statements = statement+:s -> s,
+  statements = statement+,
 
   statement = objdef | simple_statement,
-  objdef = "object" name:name "{" objdefbody:body "}" -> [`objectdef,name,body],
+  objdef = "object" name:name "{" objdefbody:body "}"     -> [`objectdef,name,body],
   simple_statement = obj_decln | rel_decln,
 
   objdefbody = simple_statement+,
 
   // docs dont talk about the ? operator, mail archive does: http://vpri.org/pipermail/ometa/2010-April/000242.html
-  obj_decln = (name:name ":")? objtype:typ attrs?:attrs-> [`object, typ, name, [`attrs, attrs]],
-  rel_decln = name:opd1 opr:op name:opd2 -> [op, opd1, opd2],
+  obj_decln = (name:n ":")? objtype:typ attrs?:attrs      -> [`object, typ, n, [`attrs, attrs]],
+  rel_decln = name:opd1 opr:op name:opd2                  -> [op, opd1, opd2],
   
-  objtype = "box" | "square" | "rect" | "circle" | "oval" | "arc" | "image" | "point" | "link" | "line" | nqstring,
-  attrs = "[" listOf('nvpair',","):a "]" -> a,
+  objtype = "box"       | "square"  | "rect" 
+            | "circle"  | "oval"    | "arc"   | "line" 
+            | "image" 
+            | "point"   | "link"    | 
+            nqstring,
+  attrs = "[" listOf('nvpair',","):attrs "]"              -> attrs,
 
-  opr = ">" | "<",
-  nvpair = nqstring:name "=" text:value -> [`attr,name, value],
+  opr = "is"? ("above" | "below" | "left" | "right"
+         | "n" | "north"  | "s" | "south"
+         | "e" | "east"   | "w" | "west"
+         | "ne" | "northeast" | "sw" | "southwest"
+         | "nw" | "northwest" | "se" | "southeast"
+         |">" | "<" | "smaller" | "bigger"
+         |">>" | "<<" | "much smaller" | "much bigger"
+        ):op  ("of" | "to" | "than")?                     -> op,
+  nvpair = nqstring:name "=" text:value                   -> [`attr,name, value],
 
-  text = spaces (qstring | nqstring):s ->s,
+  text = spaces (qstring | nqstring):s                    ->s,
   
   //this takes care of comments too. copied from bs-ometa-compiler.txt
   space = ^space |fromTo('//','\n') | fromTo('/*','*/'), 
   
   qstring = fromTo('"','"'),
-  nqstring = ('_' | '.' | letterOrDigit)+:ls -> (ls.join(''))
+  nqstring = ('_' | '.' | letterOrDigit)+:ls              -> (ls.join(''))
 }
 /*
 WordpicScanner.matchAll("picture bleh {
@@ -79,6 +90,30 @@ WordpicScanner.matchAll("picture \"Three tier arch\" {
             top:oval  
         
             top > bot
+            top bigger bot
+            top is bigger than bot
+            top is much bigger than bot
+            top bigger than bot
+            top much bigger bot
+            
+            top is north of bot
+            top is north bot
+            top north bot
+            top is south of bot
+            top is west of bot
+            top is east of bot
+            top is northwest of bot
+            top is northeast of bot
+            top is southwest of bot
+            top is southeast of bot
+            top n bot
+            top s bot
+            top e bot
+            top w bot
+            top ne bot
+            top nw bot
+            top se bot
+            top sw bot
             
             lt:line[from=top.e,to=bot.e]
             rt:line[from=top.w,to=bot.w]
