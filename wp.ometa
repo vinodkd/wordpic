@@ -23,10 +23,13 @@ ometa WordpicScanner {
   attrs = "[" listOf('nvpair',","):attrs "]"              -> attrs,
 
   opr = "is"? ("above" | "below" | "left" | "right"
-         | "n" | "north"  | "s" | "south"
-         | "e" | "east"   | "w" | "west"
-         | "ne" | "northeast" | "sw" | "southwest"
-         | "nw" | "northwest" | "se" | "southeast"
+         // order very imp here. north will not be recognized if placed after n.
+         // |||ly south and s, southwest and south and sw and s
+        
+         | "northeast" | "northwest" | "southwest" | "southeast" 
+         | "north"  | "south" | "east" | "west" 
+         | "nw" | "ne" | "se" | "sw"
+         | "n" | "s" | "e" | "w"  
          |">" | "<" | "smaller" | "bigger"
          |">>" | "<<" | "much smaller" | "much bigger"
         ):op  ("of" | "to" | "than")?                     -> op,
@@ -88,33 +91,7 @@ WordpicScanner.matchAll("picture \"Three tier arch\" {
           object cylinder{
             bot:arc
             top:oval  
-        
-            top > bot
-            top bigger bot
-            top is bigger than bot
-            top is much bigger than bot
-            top bigger than bot
-            top much bigger bot
-            
-            top is north of bot
-            top is north bot
-            top north bot
-            top is south of bot
-            top is west of bot
-            top is east of bot
-            top is northwest of bot
-            top is northeast of bot
-            top is southwest of bot
-            top is southeast of bot
-            top n bot
-            top s bot
-            top e bot
-            top w bot
-            top ne bot
-            top nw bot
-            top se bot
-            top sw bot
-            
+                    
             lt:line[from=top.e,to=bot.e]
             rt:line[from=top.w,to=bot.w]
           }
@@ -127,4 +104,32 @@ WordpicScanner.matchAll("picture \"Three tier arch\" {
           link[from=server,to=db]
           // also can be written as
           // client -- server -- db
+        }",'wordpic',[],matchFailed);
+
+WordpicScanner.matchAll("picture \"Positioning Test\" {
+            x > y
+            x bigger y
+            x is bigger than y
+            x is much bigger than y
+            x bigger than y
+            x much bigger y
+            
+            x is north of y
+            x is north y
+            x north y
+            x is south of y
+            x is west of y
+            x is east of y
+            x is northwest of y
+            x is northeast of y
+            x is southwest of y
+            x is southeast of y
+            x n y
+            x s y
+            x e y
+            x w y
+            x ne y
+            x nw y
+            x se y
+            x sw y
         }",'wordpic',[],matchFailed);
