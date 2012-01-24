@@ -23,3 +23,4 @@ other tips:
 - define a text or string rule and use that as the start of your grammar exploration. let this be your default RHS for any rule and refine from there.
   - pitfall: string works on strings of objects, and treats all javascript strings as arrays of char objects. so define a string rule of your own that will work with matchall.
 - although the docs dont show it, the ? operator is supported. as is the OMeta idiom of (optchoice | empty). ref: http://vpri.org/pipermail/ometa/2010-June/000297.html
+- this must be PEGs 101, but killed my buzz for 2 hrs: having "north" and "n" in that order didnt work; and I couldnt figure it out for a while. moral: when using ordered choice make sure the greedier option is first so its abscence can be easily identified
