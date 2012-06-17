@@ -1,25 +1,25 @@
 // see hard-earned-gyaan.txt for all the work that went into getting this to work.
 
 ometa WordpicScanner {
-  wordpic = "picture" name:n "{" statements:s "}"         -> [`wordpic,n,s],
+  wordpic = ("picture" | "diagram") name:n "{" statements:s "}"         -> [`wordpic,n,s],
   name = text,
   statements = statement+,
 
-  statement = objdef | simple_statement,
-  objdef = "object" name:name "{" objdefbody:body "}"     -> [`objectdef,name,body],
-  simple_statement = obj_decln | rel_decln,
+  statement = shape | simple_statement,
+  shape = ("object" | "shape" | "symbol") name:name "{" body:body "}"     -> [`shape,name,body],
+  simple_statement = instance | relation,
 
-  objdefbody = simple_statement+,
+  body = simple_statement+,
 
   // docs dont talk about the ? operator, mail archive does: http://vpri.org/pipermail/ometa/2010-April/000242.html
-  obj_decln = (name:n ":")? objtype:typ attrs?:attrs      -> [`object, typ, n, [`attrs, attrs]],
-  rel_decln = name:opd1 opr:op name:opd2                  -> [op, opd1, opd2],
+  instance = (name:n ":")? type:typ attrs?:attrs      -> [`instance, typ, n, [`attrs, attrs]],
+  relation = name:opd1 opr:op name:opd2               -> [op, opd1, opd2],
   
-  objtype = "box"       | "square"  | "rect" 
-            | "circle"  | "oval"    | "arc"   | "line" 
-            | "image" 
-            | "point"   | "link"    | 
-            nqstring,
+  type =  "box"     | "square"  | "rect" 
+        | "circle"  | "oval"    | "arc"   | "line" 
+        | "image" 
+        | "point"   | "link"    | 
+          nqstring,
   attrs = "[" listOf('nvpair',","):attrs "]"              -> attrs,
 
   opr = "is"? ("above" | "below" | "left" | "right"
@@ -132,4 +132,32 @@ WordpicScanner.matchAll("picture \"Positioning Test\" {
             x nw y
             x se y
             x sw y
+        }",'wordpic',[],matchFailed);
+
+// testing out diagram, shape and symbol keywords
+WordpicScanner.matchAll("diagram \"Three tier arch\" {
+          shape cylinder{
+            bot:arc
+            top:oval  
+                    
+            lt:line[from=top.e,to=bot.e]
+            rt:line[from=top.w,to=bot.w]
+          }
+          
+          symbol cylinder{
+            bot:arc
+            top:oval  
+                    
+            lt:line[from=top.e,to=bot.e]
+            rt:line[from=top.w,to=bot.w]
+          }
+          
+          client:box[color=green] //default label is the name.
+          server:box[color=blue]
+          db:cylinder[color=red]
+          
+          l1:link[from=client,to=server]
+          link[from=server,to=db]
+          // also can be written as
+          // client -- server -- db
         }",'wordpic',[],matchFailed);
