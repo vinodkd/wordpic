@@ -11,7 +11,7 @@ Philosophy, Design and Syntax Ideas
   - if unknown name, default object depicted
 - {} implies containment
 - top to bottom order of lines in the document implies Y axis placement
-- left to right order of words in a line impliex X axis placement
+- left to right order of words in a line implies X axis placement
 - can be overridden using operators that change order:
   - X above Y
   - X below Y
