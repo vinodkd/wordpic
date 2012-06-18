@@ -1,0 +1,17 @@
+digraph G{
+        node[shape=box style="rounded,filled" fontname=Sans fillcolor="#ccccff"]  //i'm terrible partial to to perrywinkle blue ;)
+        //compound=true
+        //rankdir=LR
+        //outputMode=nodesfirst
+        
+    commandlinewrapper -> parser [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+    nodejswrapper -> parser [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+    webwrapper -> parser [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+    parser -> logical_interpreter [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+    logical_interpreter -> physical_interpreter [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+}

@@ -1,0 +1,35 @@
+to-build: &wordpic
+    name: wordpic - a graphviz-style tool for diagramming.
+    version: 1.0
+    with-features:
+        - &f1 ability to describe pictures/diagrams in a near-graphviz style 
+        - &f2 abilty to render the picture/diagram in various formats
+        - &f3 specifically, the ability to output in "enriched source" format a la Graphviz
+        - &f4 ability to render on an html5 canvas
+    and-capabilities:
+        - &nf1 to run as a command line tool similar to dot
+        - &nf2 to run online from within a browser
+        - &nf3 to run from a nodejs server
+    
+    requires:
+        defining:
+            - the declarative input syntax - PARTIALLY DONE
+            - the imperative output syntax - PARTIALLY DONE
+            - the interaction between logical and physical primitives - TBD
+        building:
+            - parser: a parser to read the input file and convert to a json AST - OMETAJS PROTOTYPE DONE
+            - logical_interpreter: to process the AST and convert it into a logical grid of objects 
+            - physical_interpreter: to process the logical grid and convert them into physical canvas objects
+            - commandlinewrapper: to wrap the above components such that they're callable from the command line
+            - nodejswrapper: to wrap the above components such that they're calllable as a nodejs service
+            - webwrapper: to wrap the above components such that they're calllable from a web page
+        using:
+            - os: any
+            - language: javascript
+    realizing-architecture:
+            - commandlinewrapper calls parser
+            - nodejswrapper calls parser
+            - webwrapper calls parser
+            - parser calls logical_interpreter
+            - logical_interpreter calls physical_interpreter
+            
