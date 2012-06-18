@@ -1,0 +1,229 @@
+<html>  
+ <head>  
+  <script type="application/javascript">
+	
+	function box(ctx,defaults,args){
+		var x=args.x,y=args.y,h=args.h,w=args.w;
+		if(!x) x=defaults.x;
+		if(!y) y=defaults.y;
+		if(!h) h=defaults.h;
+		if(!w) w=defaults.w;
+
+		var fill = args.fill;
+		if(!fill) fill=defaults.fill;
+        ctx.fillStyle = fill;
+        ctx.fillRect (x, y, h, w);  
+
+		var stroke = args.border;
+		if(!stroke) stroke=defaults.border;
+        ctx.strokeStyle = stroke;
+        ctx.strokeRect (x, y, h, w);  
+	}
+
+	function circle(ctx,defaults,args){
+		var x=args.x,y=args.y,r=x.r;
+		
+		if(!x)	x=defaults.x;
+		if(!y)	y=defaults.y;
+		if(!r)	r=defaults.r;
+
+		ctx.beginPath();
+		ctx.arc(x,y,r,0,Math.PI*2,false);
+		ctx.closePath();
+
+		var fill = args.fill;
+		if(!fill) fill=defaults.fill;
+        ctx.fillStyle = fill;
+		ctx.fill();
+
+		var stroke = args.border;
+		if(!stroke) stroke=defaults.border;
+        ctx.strokeStyle = stroke;
+		ctx.stroke();
+	}
+
+	//DESIGN FLAW: LOGICAL SPACE REQUIRES H & W CALCULATED FROM PHYSICAL SPACE
+	var SHAPES = {
+		'box'	: { drawfn: box		, defaults: {x:0, y:0, h:10, w:10,		 border: 'rgba(0,0,0,1)', fill: 'rgba(0,1,0,0.5)'}},
+		'circle': { drawfn: circle	, defaults: {x:0, y:0, h:10, w:10,r: 10, border: 'rgba(0,0,0,1)', fill: 'rgba(0,1,0,0.5)'}}
+	};
+
+	function getCtx(){
+      var canvas = document.getElementById("canvas");
+	  var ctx;
+      if (canvas.getContext) {  
+        ctx = canvas.getContext("2d");
+	  }
+	  return ctx;
+	}
+
+	function draw(ctx, picture){  
+		for(s in picture){
+			var shape = picture[s];
+			var shapeFn = SHAPES[shape.shape].drawfn;
+			var defaults = SHAPES[shape.shape].defaults;
+			if(shapeFn){
+				shapeFn(ctx,defaults,shape.args);
+			}
+			// else silently ignore
+		}
+      }
+
+	var picture = [
+		{type: 'obj', shape:'box', id:'b1',fill:'red'},
+		{type: 'obj', shape:'box', id:'b2', fill:'blue'},
+		{type: 'rel', rel:'sw', obj1:'b2', obj2:'b1'},
+		{type: 'obj', shape:'box', id:'b3', fill:'green'},
+		{type: 'rel', rel:'se', obj1:'b3', obj2:'b2'},
+		{type: 'obj', shape:'circle', id:'b4', fill:'orange'},
+		{type: 'rel', rel:'>>', obj1:'b4', obj2:'b2'},
+		{type: 'rel', rel:'>', obj1:'b1', obj2:'b3'},
+	];
+
+	//semantic: anObj is after refObj 
+	function after(anObj,refObj){
+		anObj.x = refObj ? refObj.x+1 : 0 ; //assume landscape for now
+		anObj.y = refObj ? refObj.y   : 0 ;
+		anObj.h = anObj.h ? anobj.h	  : 1 ;
+		anObj.w = anObj.w ? anobj.w	  : 1 ;
+	}
+
+	function sw(anObj,refObj){
+		anObj.x = refObj ? refObj.x-1 : 0 ; 
+		anObj.y = refObj ? refObj.y+1 : 0 ;
+	}
+
+	function se(anObj,refObj){
+		anObj.x = refObj ? refObj.x+1 : 0 ; 
+		anObj.y = refObj ? refObj.y+1 : 0 ;
+	}
+
+	function biggerThan(anObj,refObj){
+		anObj.h = refObj ? refObj.h*1.5 : 1.5 ;
+		anObj.w = refObj ? refObj.w*1.5 : 1.5 ;
+	}
+
+	function muchBiggerThan(anObj,refObj){
+		anObj.h = refObj ? refObj.h*3 : 3 ;
+		anObj.w = refObj ? refObj.w*3 : 3 ;
+	}
+
+	var RELS = {
+		'after'	: after,
+		'sw'	: sw,
+		'se'	: se,
+		'>'		: biggerThan,
+		'>>'	: muchBiggerThan,
+	};
+
+	function process(picture){
+		var objects = {}, lastObj;
+		var bbox = {xmin:0,ymin:0,xmax:0,ymax:0,h:0,w:0};
+		var outpic = [];
+		
+		function layoutLogically(){
+			function placeObj(stmt){
+				var obj={shape:stmt.shape, id:stmt.id, fill:stmt.fill, border: stmt.border};
+				after(obj,lastObj);
+				objects[obj.id]=obj;
+				lastObj = obj;
+			}
+			
+			function handleRel(stmt){
+				if(stmt.rel){
+					var relFn=RELS[stmt.rel];
+					if(relFn){
+						relFn(objects[stmt.obj1], objects[stmt.obj2]);
+					}
+				}
+			}
+			
+			for(var s in picture){
+				var stmt = picture[s];
+				switch(stmt.type){
+					case 'obj':
+						placeObj(stmt);
+						break;
+					case 'rel':
+						handleRel(stmt);
+						break;
+				}
+			}
+		}
+		
+		function normalizeLogicalLayout(){
+			function calcBBox(){
+				for(var o in objects){
+					var obj=objects[o];
+					if(obj.x < bbox.xmin) bbox.xmin=obj.x;
+					if(obj.y < bbox.ymin) bbox.ymin=obj.y;
+					if(obj.x > bbox.xmax) bbox.xmax=obj.x;
+					if(obj.y > bbox.ymax) bbox.ymax=obj.y;
+			
+					bbox.h=bbox.ymax - bbox.ymin;
+					bbox.w=bbox.xmax - bbox.xmin;
+				}
+			}
+			
+			function xlateToOrigin(){
+				for(var o in objects){
+					var obj=objects[o];
+					obj.x = obj.x - bbox.xmin;
+					obj.y = obj.y - bbox.ymin;
+				}
+				bbox.xmin=0; bbox.ymin=0;
+				bbox.xmax=bbox.w; bbox.ymax=bbox.h;
+			}
+			
+			calcBBox();
+			xlateToOrigin();
+		}
+		
+		function mapToCanvas(){
+			var SCALE=50;
+
+			for(var o in objects){
+				var obj=objects[o];
+				outpic.push({
+					shape:obj.shape, 
+					args:{
+						x		:obj.x * SCALE,
+						y		:obj.y * SCALE,
+						h		:obj.h * SCALE,
+						w		:obj.w * SCALE,
+						fill	:obj.fill
+					}
+				});
+			}
+		}
+
+		layoutLogically();
+		normalizeLogicalLayout();
+		mapToCanvas();
+
+		// this is the static output shown till i'm able to replace it with the actual output.
+		// the actual output should be in the format below.
+		/*
+		var picture = [
+			{shape:'box', id:'b1', args: {}},
+			{shape:'box', id:'b2', args: {x:10, y:20}},
+			{shape:'box', id:'b3', args: {x:20, y:20, h:55, w:50}},
+			{shape:'box', id:'b4', args: {x:10, y:10, h:55, w:50, fill: "rgb(200,0,0)"}},
+			{shape:'box', id:'b5', args: {x:30, y:30, h:55, w:50, fill: "rgba(0,0,200,0.5)"}}
+		];
+		*/
+		return outpic;
+	}
+	
+	function showWP(){
+		var cookedPic = process(picture);
+		draw(getCtx(),cookedPic);
+	}
+  </script>  
+ </head>  
+ <body onload="showWP();">
+   <p>Canvas begin</p>
+   <canvas id="canvas" width="300" height="300"></canvas>
+   <p>Canvas end</p>
+ </body>  
+</html> 

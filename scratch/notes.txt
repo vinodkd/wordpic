@@ -1,0 +1,67 @@
+diagram ide{
+	menu
+	toolbar
+	// the "content" container. dont need to name it; just create a horizontal container by blocking it
+	{
+		tree	editor	properties
+		outputs
+	}
+	status
+
+	part menu{
+		"File" "Edit" "Help"
+	}
+
+	part toolbar{
+		box[label="open"] box[label="cut"] box[label="paste"]
+	}
+
+
+}
+
+typ				=> new typ1:typ // ie create an instance of type "typ" and name it "typ1"
+a: typ			=> new a: typ
+new b			=> new b:default_obj
+a after b		=> new {new a; new b; a after b;}: span
+a b				=> new {new a; new b; a after b;}: span
+a
+b				=> { {new a} def b; a after b;}}
+a b
+c d e			=> axis 1{ axis 2}
+
+
+basic principles:
+	- all objects are drawn on a discrete 2d space made of cells. only one object is allowed per cell. each cell, however, can be of any size so the
+	  rows and columns of the space are not uniform; they look like a grid with a lot of bumps and hollows.
+	- each cell is allowed 8 neighbors - nsew and ns, ne, se and sw.
+	- empty rows and columns are optimized away for display
+	- no coordinates
+	- use = declaration; so allow type decl anywhere var is allowed
+	- facts define relative position
+	- strictly 2d, so assume x & y; do not generalize yet to n dimensions
+	- last fact "in" wins, ie there's no conflict resolution. setting the same attribute twice uses the second value.
+	- default output is the "fully cooked" source syntax itself - exactly like graphviz.
+
+things to worry about:
+	- does syntax define order? pref yes, but makes parsing complex; and still need overriding facts as all orders cannot be represented.
+	- does syntax define containment? pref yes.
+	- does use = defn which can be refined later? pref yes.
+	- what is the type of the object? known/unknown ie will be defined in doc
+	- should i use refs to keep things simple? would be nice
+
+// fully cooked input/output
+picture p {
+	obj1:type1[x=x1,y=y1,h=h1,w=w1, ...other attrs...]
+	obj2:type2[x=x2,y=y2,h=h2,w=w2, ...other attrs...]
+}
+
+objects: things that can be displayed. eg box, circle etc.
+relations between objects: those that define position ("a is above b") & those that define display ("a points to b")
+groups: collection of objects refered to by a single name. can be aligned, but doesnt define containment.
+containers: contain other objects/groups both logically and visually.
+template objects: any group or container used as a template to create new objects
+
+
+obj						=> obj:deftype
+obj rel obj				=> obj:deftype rel obj:deftype
+
