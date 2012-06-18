@@ -1,0 +1,14 @@
+- update arch file for components
+- create basic web stack
+- abstract out command line stack
+- abstract out nodejs stack
+- create compelling sample wordpics
+  - standard ui examples:
+      - ide
+      - web page
+  - standard visio-style examples
+      - architecture diagram
+      - sequence diagram
+  - simple pictures
+      - sunrise
+      - stick man cartoon
