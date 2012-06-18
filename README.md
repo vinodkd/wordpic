@@ -1,6 +1,6 @@
 Wordpic: Draw pictures by describing them
 ==========================================
-Wordpic allows you to draw pictures using words. It is heavily influenced by graphviz in its syntax, so if you're used to Graphviz to draw diagrams, this will seem natural to you. Hopefully, it will seem natural enough even if you dont use Graphviz.
+Wordpic allows you to draw diagrams and pictures using words. It is heavily influenced by graphviz in its syntax, so if you're used to Graphviz to draw diagrams, this will seem natural to you. Hopefully, it will seem natural enough even if you dont use Graphviz.
 
 Some examples
 =============
@@ -13,7 +13,7 @@ Status
 - Build parser: IN PROGRESS
 - Build interpreter: TBD
   - decide on Canvas wrapper
-  - Implement it
+  - Implement it: BASIC PROTOTYPE DONE. See scratch/test.html
 - Executable formats:
   - build command line version: TBD
   - Integrate with browser : TBD

@@ -1,3 +1,4 @@
+- update readme.md to better represent an overview of the project
 - update arch file for components
 - create basic web stack
 - abstract out command line stack
