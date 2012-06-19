@@ -68,7 +68,7 @@
 			// else silently ignore
 		}
       }
-
+/*
 	var picture = [
 		{type: 'obj', shape:'box', id:'b1',fill:'red'},
 		{type: 'obj', shape:'box', id:'b2', fill:'blue'},
@@ -78,6 +78,23 @@
 		{type: 'obj', shape:'circle', id:'b4', fill:'orange'},
 		{type: 'rel', rel:'>>', obj1:'b4', obj2:'b2'},
 		{type: 'rel', rel:'>', obj1:'b1', obj2:'b3'},
+	];
+*/
+	var picture = [
+		{type: 'obj', shape:'box', id:'windowtitle',fill:'blue'},
+		{type: 'obj', shape:'box', id:'menu', fill:'grey'},
+		{type: 'obj', shape:'box', id:'toolbar', fill:'green'},
+		{type: 'obj', shape:'box', id:'filetree', fill:'orange'},
+		{type: 'obj', shape:'box', id:'editor', fill:'white'},
+		{type: 'obj', shape:'box', id:'properties', fill:'red'},
+		{type: 'obj', shape:'box', id:'statusbar', fill:'yellow'},
+		{type: 'rel', rel:'above', obj1:'windowtitle', obj2:'menu'},
+		{type: 'rel', rel:'above', obj1:'menu', obj2:'toolbar'},
+    {type: 'rel', rel:'above', obj1:'toolbar', obj2:'filetree'},
+    {type: 'rel', rel:'right', obj1:'editor', obj2:'toolbar'},
+    {type: 'rel', rel:'right', obj1:'properties', obj2:'editor'},
+    {type: 'rel', rel:'above', obj1:'filetree', obj2:'statusbar'},
+		{type: 'rel', rel:'>>', obj1:'editor', obj2:'filetree'},
 	];
 
 	//semantic: anObj is after refObj 
@@ -108,12 +125,23 @@
 		anObj.w = refObj ? refObj.w*3 : 3 ;
 	}
 
+  function above(anObj,refObj){
+    anObj.y = refObj ? refObj.y-1 : anObj.y;
+  }
+
+  function right(anObj,refObj){
+    anObj.x = refObj ? refObj.x+1 : anObj.x;
+  }
+
+  
 	var RELS = {
 		'after'	: after,
-		'sw'	: sw,
-		'se'	: se,
-		'>'		: biggerThan,
-		'>>'	: muchBiggerThan,
+		'sw'	  : sw,
+		'se'	  : se,
+		'>'		  : biggerThan,
+		'>>'	  : muchBiggerThan,
+    'above' : above,
+    'right' : right
 	};
 
 	function process(picture){
