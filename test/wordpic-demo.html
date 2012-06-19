@@ -1,0 +1,58 @@
+<html>  
+ <head>  
+  <script type="application/javascript">
+  </script>
+  <style type="text/css" media="screen">
+    * {
+      font-family:Verdana;
+      width:98%;
+    }
+    
+    span.col1,span.col2 { width:50%;}
+    
+    span.col1{float:left;}
+    span.col2{float:right;}
+    
+    .gobutton {width:10%;float:right;}
+    #canvas {
+      border:1px black solid;
+      width:90%; height:60%;
+    }    
+  </style>
+ </head>  
+ <body onload="">
+  <h1>Wordpic Demo</h1>
+  <p>Enter wordpic syntax below and press Go to see it rendered on the right.</p>
+  <div class="table">
+    <span class="row">
+      <span class="col1">
+        <form action="wordpic-demo_submit" method="get">
+            <textarea name="source" rows="32" cols="70">
+picture ide{
+  windowtitle : box[color='blue']
+  menu        : box[color='grey']
+  toolbar     : box[color='grey']
+  filetree    : box[color='yellow']
+  editor      : box[color='white']
+  properties  : box[color='white']
+  statusbar   : box[color='grey']
+
+  windowtitle above menu
+  menu above toolbar
+  toolbar above filetree
+  editor right of filetree
+  properties right of editor
+  statusbar below filetree
+
+  editor >> filetree
+}
+            </textarea>
+            <p><input class="gobutton" type="submit" value="Go &rarr;"></p>
+          </form>
+      </span>
+      <span class="col2">
+         <canvas id="canvas"></canvas>
+      </span>
+  </div>
+ </body>  
+</html> 
