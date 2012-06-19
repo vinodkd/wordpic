@@ -1,6 +1,18 @@
 <html>  
- <head>  
+ <head>
+  <script type="application/javascript" src="../lib/wordpic.js"></script>
   <script type="application/javascript">
+  var source, canvas, wordpic;
+  function init(){
+    source=document.getElementById("source");
+    canvas=document.getElementById("canvas");
+    wpCanvas=WORDPIC.out.Canvas;
+  }
+  
+  function go(){
+    wpCanvas.render(source,canvas);
+    return false;
+  }
   </script>
   <style type="text/css" media="screen">
     * {
@@ -13,21 +25,22 @@
     span.col1{float:left;}
     span.col2{float:right;}
     
-    .gobutton {width:10%;float:right;}
-    #canvas {
+    #source, #canvas {
       border:1px black solid;
-      width:90%; height:60%;
+      width:99%; height:70%;
     }    
+
+    #gobutton {width:10%;float:right;}
   </style>
  </head>  
- <body onload="">
+ <body onload="init();">
   <h1>Wordpic Demo</h1>
   <p>Enter wordpic syntax below and press Go to see it rendered on the right.</p>
   <div class="table">
     <span class="row">
       <span class="col1">
-        <form action="wordpic-demo_submit" method="get">
-            <textarea name="source" rows="32" cols="70">
+        <form>
+            <textarea id="source">
 picture ide{
   windowtitle : box[color='blue']
   menu        : box[color='grey']
@@ -47,7 +60,7 @@ picture ide{
   editor >> filetree
 }
             </textarea>
-            <p><input class="gobutton" type="submit" value="Go &rarr;"></p>
+            <p><input id="gobutton" type="button" value="Go &rarr;" onclick="go();"/></p>
           </form>
       </span>
       <span class="col2">
