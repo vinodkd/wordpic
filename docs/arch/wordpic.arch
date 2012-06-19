@@ -32,4 +32,13 @@ to-build: &wordpic
             - webwrapper calls parser
             - parser calls logical_interpreter
             - logical_interpreter calls physical_interpreter
-            
+    
+    to-build:
+      - logical_interpreter:
+          requires:
+            defining:
+              - a pipeline of tasks: create the objects, place them per the rules and render them on the canvas
+              - how to do this incrementally (if possible) 
+            building:
+            - object_creation: a step that creates the basic objects
+            - placement: a step that places the objects as per the relations given on the logical space
