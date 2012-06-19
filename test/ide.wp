@@ -1,0 +1,38 @@
+version 1: the mspaint version:
+===============================
+picture ide{
+  windowtitle : box[color='blue']
+  menu        : box[color='grey']
+  toolbar     : box[color='grey']
+  filetree    : box[color='yellow']
+  editor      : box[color='white']
+  properties  : box[color='white']
+  statusbar   : box[color='grey']
+
+  windowtitle above menu
+  menu above toolbar
+  toolbar above filetree
+  editor right of filetree
+  properties right of editor
+  statusbar below filetree
+
+  editor >> filetree
+}
+
+picture ide {
+  window{
+    menu
+    toolbar
+    [filetree  editor  properties]
+    statusbar
+  }
+}
+
+
+- decided: no markers for objects. the identifiers will be matched against known shapes and if not found, assigned a 
+  default. when a shape becomes known, previous instances will be updated.
+  ie, window => object window:window[id=window1]
+      w:window => object w:window[id=w]
+- decided: {} represents vertical containment and [] represents horizontal containment. ie, they are div and span resp.   	this way i dont have to do python/ruby-style newline checks
+- this implies that any object can be a container. so, a simple declaration like menu above is actually:
+  menu => object menu:menu[id=menu5]{}
