@@ -13,9 +13,11 @@ to-build: &wordpic
     
     requires:
         defining:
+            - the relation between the logical and physical spaces - DONE; logical syntax will support a size attr that defines the size of the output space in unitless numbers, but which are in 1-1 correspondence with the physical coord system, and a spread param which is a row x col spec for the number of "pages" the output should be spread into.
             - the declarative input syntax - PARTIALLY DONE
             - the imperative output syntax - PARTIALLY DONE
-            - the interaction between logical and physical primitives - TBD
+            - the interaction between logical and physical primitives - DONE; logical primitives will support attributes required to phsycially draw it and params required to logically place it.
+            - batch vs stream mode of processing the rendering pipeline - DONE; decided to support both.
         building:
             - parser: a parser to read the input file and convert to a json AST - OMETAJS PROTOTYPE DONE
             - logical_interpreter: to process the AST and convert it into a logical grid of objects 
@@ -37,8 +39,10 @@ to-build: &wordpic
       - logical_interpreter:
           requires:
             defining:
-              - a pipeline of tasks: create the objects, place them per the rules and render them on the canvas
-              - how to do this incrementally (if possible) 
+              - a pipeline of tasks: create the objects, place them per the rules and render them on the canvas - DONE
+              - how to do this incrementally (if possible) - DONE; using callbacks
             building:
             - object_creation: a step that creates the basic objects
             - placement: a step that places the objects as per the relations given on the logical space
+            - render: a step that renders objects onto a logical space that uses unitless numbers and has 1-1 correspondence with the output Coord System. Outputs a wordpic document with the physical syntax.
+            - callbacks: each step in the pipeline will allow the previous step to act on intermediate results as soon as a "unit" of output has been created via these. 
