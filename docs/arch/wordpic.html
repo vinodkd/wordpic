@@ -83,11 +83,15 @@
       </div>
       <div class="sidbody">
       
+        <div class="dtask">the relation between the logical and physical spaces - DONE; logical syntax will support a size attr that defines the size of the output space in unitless numbers, but which are in 1-1 correspondence with the physical coord system, and a spread param which is a row x col spec for the number of "pages" the output should be spread into.</div>
+    
         <div class="dtask">the declarative input syntax - PARTIALLY DONE</div>
     
         <div class="dtask">the imperative output syntax - PARTIALLY DONE</div>
     
-        <div class="dtask">the interaction between logical and physical primitives - TBD</div>
+        <div class="dtask">the interaction between logical and physical primitives - DONE; logical primitives will support attributes required to phsycially draw it and params required to logically place it.</div>
+    
+        <div class="dtask">batch vs stream mode of processing the rendering pipeline - DONE; decided to support both.</div>
     
     </div>
   </div>
@@ -149,6 +153,14 @@
         <a class="sidlink" href="#placement"><span class="sidname">placement</span></a> : 
         <span class="siddesc">a step that places the objects as per the relations given on the logical space</span>
       </div>
+    <div class="new_component">
+        <a class="sidlink" href="#render"><span class="sidname">render</span></a> : 
+        <span class="siddesc">a step that renders objects onto a logical space that uses unitless numbers and has 1-1 correspondence with the output Coord System. Outputs a wordpic document with the physical syntax.</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#callbacks"><span class="sidname">callbacks</span></a> : 
+        <span class="siddesc">each step in the pipeline will allow the previous step to act on intermediate results as soon as a "unit" of output has been created via these.</span>
+      </div>
   
   </div>
   </div>
@@ -160,9 +172,9 @@
       </div>
       <div class="sidbody">
       
-        <div class="dtask">a pipeline of taskscreate the objects, place them per the rules and render them on the canvas</div>
+        <div class="dtask">a pipeline of taskscreate the objects, place them per the rules and render them on the canvas - DONE</div>
     
-        <div class="dtask">how to do this incrementally (if possible)</div>
+        <div class="dtask">how to do this incrementally (if possible) - DONE; using callbacks</div>
     
     </div>
   </div>
