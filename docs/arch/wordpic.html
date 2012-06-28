@@ -53,12 +53,12 @@
         <span class="siddesc">a parser to read the input file and convert to a json AST - OMETAJS PROTOTYPE DONE</span>
       </div>
     <div class="new_component">
-        <a class="sidlink" href="#logical_interpreter"><span class="sidname">logical_interpreter</span></a> : 
+        <a class="sidlink" href="#logical_renderer"><span class="sidname">logical_renderer</span></a> : 
         <span class="siddesc">to process the AST and convert it into a logical grid of objects</span>
       </div>
     <div class="new_component">
-        <a class="sidlink" href="#physical_interpreter"><span class="sidname">physical_interpreter</span></a> : 
-        <span class="siddesc">to process the logical grid and convert them into physical canvas objects</span>
+        <a class="sidlink" href="#physical_renderer"><span class="sidname">physical_renderer</span></a> : 
+        <span class="siddesc">to process the logical grid and convert them into physically drawn objects</span>
       </div>
     <div class="new_component">
         <a class="sidlink" href="#commandlinewrapper"><span class="sidname">commandlinewrapper</span></a> : 
@@ -71,6 +71,10 @@
     <div class="new_component">
         <a class="sidlink" href="#webwrapper"><span class="sidname">webwrapper</span></a> : 
         <span class="siddesc">to wrap the above components such that they're calllable from a web page</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#callbacks"><span class="sidname">callbacks</span></a> : 
+        <span class="siddesc">each step in the pipeline will allow the previous step to act on intermediate results as soon as a "unit" of output has been created via these.</span>
       </div>
   
   </div>
@@ -92,6 +96,8 @@
         <div class="dtask">the interaction between logical and physical primitives - DONE; logical primitives will support attributes required to phsycially draw it and params required to logically place it.</div>
     
         <div class="dtask">batch vs stream mode of processing the rendering pipeline - DONE; decided to support both.</div>
+    
+        <div class="dtask">how to do this incrementally (if possible) - DONE; using callbacks</div>
     
     </div>
   </div>
@@ -131,7 +137,7 @@
 
           <div class="to_build_children">
     <div class="sidheader">
-      <span id="logical_interpreter">logical_interpreter</span>
+      <span id="logical_processor">logical_processor</span>
     </div>
     <div class="sidbody">
     
@@ -172,14 +178,13 @@
       </div>
       <div class="sidbody">
       
-        <div class="dtask">a pipeline of taskscreate the objects, place them per the rules and render them on the canvas - DONE</div>
-    
-        <div class="dtask">how to do this incrementally (if possible) - DONE; using callbacks</div>
+        <div class="dtask">a pipeline of tasks to create the objects, place them per the rules and render them on the canvas - DONE</div>
     
     </div>
   </div>
 
     
+  
   
 </div>
 </div>
@@ -213,6 +218,36 @@
     </div>
     <div class="sidbody">
     
+      <div class='suggestion'>physical_renderer is declared, but not defined. Do you want to?</div>
+    
+    </div>
+  </div>
+  <div class="to_build_children">
+    <div class="sidheader">
+      <span id="suggestion">suggestion</span>
+    </div>
+    <div class="sidbody">
+    
+      <div class='suggestion'>logical_renderer is declared, but not defined. Do you want to?</div>
+    
+    </div>
+  </div>
+  <div class="to_build_children">
+    <div class="sidheader">
+      <span id="suggestion">suggestion</span>
+    </div>
+    <div class="sidbody">
+    
+      <div class='suggestion'>callbacks is declared, but not defined. Do you want to?</div>
+    
+    </div>
+  </div>
+  <div class="to_build_children">
+    <div class="sidheader">
+      <span id="suggestion">suggestion</span>
+    </div>
+    <div class="sidbody">
+    
       <div class='suggestion'>nodejswrapper is declared, but not defined. Do you want to?</div>
     
     </div>
@@ -224,16 +259,6 @@
     <div class="sidbody">
     
       <div class='suggestion'>commandlinewrapper is declared, but not defined. Do you want to?</div>
-    
-    </div>
-  </div>
-  <div class="to_build_children">
-    <div class="sidheader">
-      <span id="suggestion">suggestion</span>
-    </div>
-    <div class="sidbody">
-    
-      <div class='suggestion'>physical_interpreter is declared, but not defined. Do you want to?</div>
     
     </div>
   </div>

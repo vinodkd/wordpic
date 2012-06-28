@@ -4,14 +4,22 @@ digraph G{
         //rankdir=LR
         //outputMode=nodesfirst
         
-    commandlinewrapper -> parser [label="calls",color=gray, fontname=Sans fontsize="10"]
+    commandlinewrapper -> physical_renderer [label="calls",color=gray, fontname=Sans fontsize="10"]
       
-    nodejswrapper -> parser [label="calls",color=gray, fontname=Sans fontsize="10"]
+    nodejswrapper -> physical_renderer [label="calls",color=gray, fontname=Sans fontsize="10"]
       
-    webwrapper -> parser [label="calls",color=gray, fontname=Sans fontsize="10"]
+    webwrapper -> physical_renderer [label="calls",color=gray, fontname=Sans fontsize="10"]
       
-    parser -> logical_interpreter [label="calls",color=gray, fontname=Sans fontsize="10"]
+    physical_renderer -> parser [label="calls",color=gray, fontname=Sans fontsize="10"]
       
-    logical_interpreter -> physical_interpreter [label="calls",color=gray, fontname=Sans fontsize="10"]
+    parser -> logical_processor [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+    logical_processor -> physical_processor [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+    physical_renderer_callback -> parser_callback [label="iscalledby",color=gray, fontname=Sans fontsize="10"]
+      
+    parser_callback -> logical_processor_callback [label="iscalledby",color=gray, fontname=Sans fontsize="10"]
+      
+    logical_processor_callback -> physical_processor_callback [label="iscalledby",color=gray, fontname=Sans fontsize="10"]
       
 }

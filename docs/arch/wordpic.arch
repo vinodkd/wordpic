@@ -18,31 +18,43 @@ to-build: &wordpic
             - the imperative output syntax - PARTIALLY DONE
             - the interaction between logical and physical primitives - DONE; logical primitives will support attributes required to phsycially draw it and params required to logically place it.
             - batch vs stream mode of processing the rendering pipeline - DONE; decided to support both.
+            - how to do this incrementally (if possible) - DONE; using callbacks
         building:
             - parser: a parser to read the input file and convert to a json AST - OMETAJS PROTOTYPE DONE
-            - logical_interpreter: to process the AST and convert it into a logical grid of objects 
-            - physical_interpreter: to process the logical grid and convert them into physical canvas objects
+            - logical_renderer: to process the AST and convert it into a logical grid of objects 
+            - physical_renderer: to process the logical grid and convert them into physically drawn objects
             - commandlinewrapper: to wrap the above components such that they're callable from the command line
             - nodejswrapper: to wrap the above components such that they're calllable as a nodejs service
             - webwrapper: to wrap the above components such that they're calllable from a web page
+            - callbacks: each step in the pipeline will allow the previous step to act on intermediate results as soon as a "unit" of output has been created via these. 
         using:
             - os: any
             - language: javascript
     realizing-architecture:
-            - commandlinewrapper calls parser
-            - nodejswrapper calls parser
-            - webwrapper calls parser
-            - parser calls logical_interpreter
-            - logical_interpreter calls physical_interpreter
+            - commandlinewrapper calls physical_renderer
+            - nodejswrapper calls physical_renderer
+            - webwrapper calls physical_renderer
+            - physical_renderer calls parser
+            - parser calls logical_processor
+            - logical_processor calls physical_processor
+            - physical_renderer_callback iscalledby parser_callback
+            - parser_callback iscalledby logical_processor_callback
+            - logical_processor_callback iscalledby physical_processor_callback 
     
     to-build:
-      - logical_interpreter:
+      - logical_processor:
           requires:
             defining:
-              - a pipeline of tasks: create the objects, place them per the rules and render them on the canvas - DONE
-              - how to do this incrementally (if possible) - DONE; using callbacks
+              - a pipeline of tasks to create the objects, place them per the rules and render them on the canvas - DONE
             building:
-            - object_creation: a step that creates the basic objects
-            - placement: a step that places the objects as per the relations given on the logical space
-            - render: a step that renders objects onto a logical space that uses unitless numbers and has 1-1 correspondence with the output Coord System. Outputs a wordpic document with the physical syntax.
-            - callbacks: each step in the pipeline will allow the previous step to act on intermediate results as soon as a "unit" of output has been created via these. 
+              - object_creation: a step that creates the basic objects
+              - placement: a step that places the objects as per the relations given on the logical space
+              - render: a step that renders objects onto a logical space that uses unitless numbers and has 1-1 correspondence with the output Coord System. Outputs a wordpic document with the physical syntax.
+              - callbacks: each step in the pipeline will allow the previous step to act on intermediate results as soon as a "unit" of output has been created via these. 
+            realizing-architecture:
+              - object_creation leads_to placement
+              - placement leads_to render
+              - object_creation calls callback
+              - object_creation calls callbacks
+              - placement calls callbacks
+              - render calls callbacks
