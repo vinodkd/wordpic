@@ -13,10 +13,18 @@ to-build: &wordpic
     
     requires:
         defining:
-            - the relation between the logical and physical spaces - DONE; logical syntax will support a size attr that defines the size of the output space in unitless numbers, but which are in 1-1 correspondence with the physical coord system, and a spread param which is a row x col spec for the number of "pages" the output should be spread into.
+            - the relation between the logical and physical spaces - DONE
+              - logical syntax will support a size attr that defines the size of the output space in unitless numbers, but which are in 1-1 correspondence with the physical coord system, 
+              - and a spread param which is a row x col spec for the number of "pages" the output should be spread into.
             - the declarative input syntax - PARTIALLY DONE
             - the imperative output syntax - PARTIALLY DONE
-            - the interaction between logical and physical primitives - DONE; logical primitives will support attributes required to phsycially draw it and params required to logically place it.
+            - the interaction between logical and physical primitives - DONE
+              - logical primitives will support attributes required to phsycially draw it 
+              - and params required to logically place it.
+              - logical placement will be in row & column discrete space, which will then map to the physical space.
+              - unary size ops, and binary relative placement ops. already placed objects will not move, new ones will be placed wrt the old ones.
+              - placement in case of "already filled neighbor" will be "next best place in direction required"
+              - after all relations are executed, if some objects still remain unplaced, they will be placed using same rule as above with the neighbor being the one above them in document order 
             - batch vs stream mode of processing the rendering pipeline - DONE; decided to support both.
             - how to do this incrementally (if possible) - DONE; using callbacks
         building:
@@ -31,15 +39,22 @@ to-build: &wordpic
             - os: any
             - language: javascript
     realizing-architecture:
-            - commandlinewrapper calls physical_renderer
-            - nodejswrapper calls physical_renderer
-            - webwrapper calls physical_renderer
-            - physical_renderer calls parser
-            - parser calls logical_processor
-            - logical_processor calls physical_processor
-            - physical_renderer_callback iscalledby parser_callback
-            - parser_callback iscalledby logical_processor_callback
-            - logical_processor_callback iscalledby physical_processor_callback 
+            layers:
+              - run: [commandlinewrapper, nodejswrapper, webwrapper]
+              - render: [physical_renderer, physical_renderer_callback]
+              - parse: [parser, parser_callback]
+              - logical: [logical_processor, logical_processor_callback]
+              - physical: [physical_processor, physical_processor_callback]
+            relations: 
+              - commandlinewrapper calls physical_renderer
+              - nodejswrapper calls physical_renderer
+              - webwrapper calls physical_renderer
+              - physical_renderer calls parser
+              - parser calls logical_processor
+              - logical_processor calls physical_processor
+              - parser_callback calls physical_renderer_callback
+              - logical_processor_callback calls parser_callback
+              - physical_processor_callback calls logical_processor_callback 
     
     to-build:
       - logical_processor:
