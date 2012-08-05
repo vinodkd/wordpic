@@ -28,9 +28,12 @@
     
     #source, #canvas {
       border:1px black solid;
-      width:99%; height:70%;
+      width:99%; 
     }    
 
+    #source { height:70%; }
+    #canvas { height:68%; }
+    
     #gobutton {width:10%;float:right;}
   </style>
  </head>  
@@ -40,6 +43,7 @@
   <div class="table">
     <span class="row">
       <span class="col1">
+        <p>Source</p>
         <form>
             <textarea id="source">
 picture ide{
@@ -58,13 +62,14 @@ picture ide{
   properties right of editor
   statusbar below filetree
 
-  editor >> filetree
+  editor is bigger
 }
             </textarea>
             <p><input id="gobutton" type="button" value="Go &rarr;" onclick="go();"/></p>
           </form>
       </span>
       <span class="col2">
+         <p>Wordpic</p>
          <canvas id="canvas"></canvas>
       </span>
   </div>
