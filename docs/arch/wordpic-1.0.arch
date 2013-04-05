@@ -10,57 +10,63 @@ to-build: &wordpic
         - &nf1 to run as a command line tool similar to dot
         - &nf2 to run online from within a browser
         - &nf3 to run from a nodejs server
-    
     requires:
-        defining:
-            - the relation between the logical and physical spaces - DONE
-              - logical syntax will support a size attr that defines the size of the output space in unitless numbers, but which are in 1-1 correspondence with the physical coord system, 
-              - and a spread param which is a row x col spec for the number of "pages" the output should be spread into.
-            - the declarative input syntax - PARTIALLY DONE
-            - the imperative output syntax - PARTIALLY DONE
-            - the interaction between logical and physical primitives - DONE
-              - logical primitives will support attributes required to phsycially draw it 
-              - and params required to logically place it.
-              - logical placement will be in row & column discrete space, which will then map to the physical space.
-              - unary size ops, and binary relative placement ops. already placed objects will not move, new ones will be placed wrt the old ones.
-              - placement in case of "already filled neighbor" will be "next best place in direction required"
-              - after all relations are executed, if some objects still remain unplaced, they will be placed using same rule as above with the neighbor being the one above them in document order 
-            - batch vs stream mode of processing the rendering pipeline - DONE; decided to support both.
-            - how to do this incrementally (if possible) - DONE; using callbacks
-        building:
-            - parser: a parser to read the input file and convert to a json AST - OMETAJS PROTOTYPE DONE
-            - logical_renderer: to process the AST and convert it into a logical grid of objects 
-            - physical_renderer: to process the logical grid and convert them into physically drawn objects
-            - commandlinewrapper: to wrap the above components such that they're callable from the command line
-            - nodejswrapper: to wrap the above components such that they're calllable as a nodejs service
-            - webwrapper: to wrap the above components such that they're calllable from a web page
-            - callbacks: each step in the pipeline will allow the previous step to act on intermediate results as soon as a "unit" of output has been created via these. 
         using:
             - os: any
             - language: javascript
+        defining:
+            - the declarative input syntax - PARTIALLY DONE. The end state of the syntax is in idea.md, but test/wordpic-demo.html represents the working version. Early iterations have resulted in drastic changes in syntax.
+            - the imperative output syntax - PARTIALLY DONE. Again, the principles of the end state are in idea.md, but notes.txt has the direct reference to the output syntax refered in &f3.
+            - the primitives available in the canvas_renderer - PARTIALLY DONE. Again, this is spread across idea.md, scratch/test.html and notes.txt.
+            - the render pipeline - PARTIALLY DONE.
+        building:
+            - webwrapper: to wrap wordpic such that it's callable from a web page
+            - canvas_renderer: to take the output of render_pipeline and convert it into physically drawn objects on a canvas
+            - render_pipeline: to process the input source and convert it into "enriched source" form.
+            - commandlinewrapper: to wrap wordpic such that it's callable from the command line
+            - nodejswrapper: to wrap wordpic such that it's calllable as a nodejs service
     realizing-architecture:
             layers:
-              - run: [commandlinewrapper, nodejswrapper, webwrapper]
-              - render: [physical_renderer, physical_renderer_callback]
-              - parse: [parser, parser_callback]
-              - logical: [logical_processor, logical_processor_callback]
-              - physical: [physical_processor, physical_processor_callback]
+              - display: [webwrapper, canvas_renderer]
+              - run: [commandlinewrapper, nodejswrapper]
+              - render: [render_pipeline]
             relations: 
-              - commandlinewrapper calls physical_renderer
-              - nodejswrapper calls physical_renderer
-              - webwrapper calls physical_renderer
-              - physical_renderer calls parser
-              - parser calls logical_processor
-              - logical_processor calls physical_processor
-              - parser_callback calls physical_renderer_callback
-              - logical_processor_callback calls parser_callback
-              - physical_processor_callback calls logical_processor_callback 
-    
+              - webwrapper calls canvas_renderer
+              - canvas_renderer calls render_pipeline
+              - commandlinewrapper calls render_pipeline
+              - nodejswrapper calls render_pipeline
     to-build:
-      - logical_processor:
+      - webwrapper:
+          requires:
+            building:
+              - html_shell: that houses the glue js and allows for the render pipeline to be called with some input.
+      - canvas_renderer:
           requires:
             defining:
-              - a pipeline of tasks to create the objects, place them per the rules and render them on the canvas - DONE
+              - the primitives that wordpic supports and how they map to the canvas' primitives. PARTIALLY DONE.
+                - logical primitives will support attributes required to phsycially draw it; eg, a box will have an origin and sizes of sides, a circle will have a center and a radius and so on.
+                - exact list of primitives supported TBD. Partial list in idea.md and notes.txt.
+              - how wordpic's sizes map to the canvas' size and viewport - PARTIALLY DONE.
+                - logical syntax will support a size attr that defines the size of the output space in unitless numbers, but which are in 1-1 correspondence with the physical coord system
+                - and a spread param which is a row x col spec for the number of "pages" the output should be spread into.
+            building:
+              - dispatcher: code that routes to the draw function
+              - draw_fn: code that knows how to draw generically
+              - object_draw_fn: code that draws a specific object
+          realizing-architecture:
+            - dispatcher calls draw_fn
+            - draw_fn calls object_draw_fn
+
+      - render_pipeline:
+          requires:
+            defining:
+              - a pipeline of tasks to create the objects, place them per the rules and render them - DONE
+                - parse the source, generating an AST.
+                - process the AST, creating objects as they are declared and placing them.
+                - place objects in default positions until a relation orders otherwise.
+                - since wordpic doesnt intend to take in dimensions, all placement must be done in a logical space, which will then be mapped to a canvas' viewport.
+                - to support &f3, the default output has to be "enriched source", ie same as input, but with position and size attributes.
+              - a launch-neutral api for the pipeline.
             building:
               - object_creation: a step that creates the basic objects
               - placement: a step that places the objects as per the relations given on the logical space
@@ -73,3 +79,21 @@ to-build: &wordpic
               - object_creation calls callbacks
               - placement calls callbacks
               - render calls callbacks
+
+
+# this should be level 2 detail. move here temporarily.
+            - the relation between the logical and physical spaces - DONE
+            - the interaction between logical and physical primitives - DONE
+              - and params required to logically place it.
+              - logical placement will be in row & column discrete space, which will then map to the physical space.
+              - unary size ops, and binary relative placement ops. already placed objects will not move, new ones will be placed wrt the old ones.
+              - placement in case of "already filled neighbor" will be "next best place in direction required"
+              - after all relations are executed, if some objects still remain unplaced, they will be placed using same rule as above with the neighbor being the one above them in document order 
+
+            - logical_renderer: to process the AST and convert it into a logical grid of objects 
+            - physical_renderer: to process the logical grid and convert them into physically drawn objects
+            - parser: a parser to read the input file and convert to a json AST - OMETAJS PROTOTYPE DONE
+
+              - parse: [parser]
+              - logical: [logical_processor, logical_processor_callback]
+              - physical: [physical_processor, physical_processor_callback]
