@@ -43,6 +43,28 @@
     <span class="sidtext">Requires:</span>
   </div>
   <div class="sidbody">
+  <div class="defining">
+    <div class="sidheader">
+      <span class="sidtext">defining:</span>
+      </div>
+      <div class="sidbody">
+      
+        <div class="dtask">the relation between the logical and physical spaces - DONE - logical syntax will support a size attr that defines the size of the output space in unitless numbers, but which are in 1-1 correspondence with the physical coord system, - and a spread param which is a row x col spec for the number of "pages" the output should be spread into.</div>
+    
+        <div class="dtask">the declarative input syntax - PARTIALLY DONE</div>
+    
+        <div class="dtask">the imperative output syntax - PARTIALLY DONE</div>
+    
+        <div class="dtask">the interaction between logical and physical primitives - DONE - logical primitives will support attributes required to phsycially draw it - and params required to logically place it. - logical placement will be in row & column discrete space, which will then map to the physical space. - unary size ops, and binary relative placement ops. already placed objects will not move, new ones will be placed wrt the old ones. - placement in case of "already filled neighbor" will be "next best place in direction required" - after all relations are executed, if some objects still remain unplaced, they will be placed using same rule as above with the neighbor being the one above them in document order</div>
+    
+        <div class="dtask">batch vs stream mode of processing the rendering pipeline - DONE; decided to support both.</div>
+    
+        <div class="dtask">how to do this incrementally (if possible) - DONE; using callbacks</div>
+    
+    </div>
+  </div>
+
+    
   <div class="building">
     <div class="sidheader">
       <span class="sidtext">building:</span>
@@ -81,28 +103,6 @@
   </div>
 
     
-  <div class="defining">
-    <div class="sidheader">
-      <span class="sidtext">defining:</span>
-      </div>
-      <div class="sidbody">
-      
-        <div class="dtask">the relation between the logical and physical spaces - DONE - logical syntax will support a size attr that defines the size of the output space in unitless numbers, but which are in 1-1 correspondence with the physical coord system, - and a spread param which is a row x col spec for the number of "pages" the output should be spread into.</div>
-    
-        <div class="dtask">the declarative input syntax - PARTIALLY DONE</div>
-    
-        <div class="dtask">the imperative output syntax - PARTIALLY DONE</div>
-    
-        <div class="dtask">the interaction between logical and physical primitives - DONE - logical primitives will support attributes required to phsycially draw it - and params required to logically place it. - logical placement will be in row & column discrete space, which will then map to the physical space. - unary size ops, and binary relative placement ops. already placed objects will not move, new ones will be placed wrt the old ones. - placement in case of "already filled neighbor" will be "next best place in direction required" - after all relations are executed, if some objects still remain unplaced, they will be placed using same rule as above with the neighbor being the one above them in document order</div>
-    
-        <div class="dtask">batch vs stream mode of processing the rendering pipeline - DONE; decided to support both.</div>
-    
-        <div class="dtask">how to do this incrementally (if possible) - DONE; using callbacks</div>
-    
-    </div>
-  </div>
-
-    
   <div class="using">
     <div class="sidheader">
       <span class="sidtext">using:</span>
@@ -125,17 +125,15 @@
   
 </div>
 </div>
-
-        <div class="arch">
+<div class="arch">
     <div class="sidheader">
       <span class="sidtext">to realize the architecture:</span>
       </div>
       <div class="sidbody">
-  <img class="archimg" src="wordpic.png"/>
+  <img class="archimg" src="wordpic.png.png"/>
   </div>
 </div>
-
-          <div class="to_build_children">
+	  <div class="to_build_children">
     <div class="sidheader">
       <span id="logical_processor">logical_processor</span>
     </div>
@@ -146,43 +144,9 @@
     <span class="sidtext">Requires:</span>
   </div>
   <div class="sidbody">
-  <div class="building">
-    <div class="sidheader">
-      <span class="sidtext">building:</span>
-      </div>
-      <div class="sidbody">
-    <div class="new_component">
-        <a class="sidlink" href="#object_creation"><span class="sidname">object_creation</span></a> : 
-        <span class="siddesc">a step that creates the basic objects</span>
-      </div>
-    <div class="new_component">
-        <a class="sidlink" href="#placement"><span class="sidname">placement</span></a> : 
-        <span class="siddesc">a step that places the objects as per the relations given on the logical space</span>
-      </div>
-    <div class="new_component">
-        <a class="sidlink" href="#render"><span class="sidname">render</span></a> : 
-        <span class="siddesc">a step that renders objects onto a logical space that uses unitless numbers and has 1-1 correspondence with the output Coord System. Outputs a wordpic document with the physical syntax.</span>
-      </div>
-    <div class="new_component">
-        <a class="sidlink" href="#callbacks"><span class="sidname">callbacks</span></a> : 
-        <span class="siddesc">each step in the pipeline will allow the previous step to act on intermediate results as soon as a "unit" of output has been created via these.</span>
-      </div>
   
-  </div>
-  </div>
-
     
-  <div class="defining">
-    <div class="sidheader">
-      <span class="sidtext">defining:</span>
-      </div>
-      <div class="sidbody">
-      
-        <div class="dtask">a pipeline of tasks to create the objects, place them per the rules and render them on the canvas - DONE</div>
-    
-    </div>
-  </div>
-
+  
     
   
   
@@ -198,7 +162,27 @@
     </div>
     <div class="sidbody">
     
+      <div class='suggestion'>logical_renderer is declared, but not defined. Do you want to?</div>
+    
+    </div>
+  </div>
+  <div class="to_build_children">
+    <div class="sidheader">
+      <span id="suggestion">suggestion</span>
+    </div>
+    <div class="sidbody">
+    
       <div class='suggestion'>parser is declared, but not defined. Do you want to?</div>
+    
+    </div>
+  </div>
+  <div class="to_build_children">
+    <div class="sidheader">
+      <span id="suggestion">suggestion</span>
+    </div>
+    <div class="sidbody">
+    
+      <div class='suggestion'>nodejswrapper is declared, but not defined. Do you want to?</div>
     
     </div>
   </div>
@@ -228,27 +212,7 @@
     </div>
     <div class="sidbody">
     
-      <div class='suggestion'>logical_renderer is declared, but not defined. Do you want to?</div>
-    
-    </div>
-  </div>
-  <div class="to_build_children">
-    <div class="sidheader">
-      <span id="suggestion">suggestion</span>
-    </div>
-    <div class="sidbody">
-    
       <div class='suggestion'>callbacks is declared, but not defined. Do you want to?</div>
-    
-    </div>
-  </div>
-  <div class="to_build_children">
-    <div class="sidheader">
-      <span id="suggestion">suggestion</span>
-    </div>
-    <div class="sidbody">
-    
-      <div class='suggestion'>nodejswrapper is declared, but not defined. Do you want to?</div>
     
     </div>
   </div>
@@ -263,6 +227,7 @@
     </div>
   </div>
 
+  
       </div>
     </div>
   </body>
