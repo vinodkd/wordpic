@@ -63,37 +63,25 @@ to-build: &wordpic
               - a pipeline of tasks to create the objects, place them per the rules and render them - DONE
                 - parse the source, generating an AST.
                 - process the AST, creating objects as they are declared and placing them.
-                - place objects in default positions until a relation orders otherwise.
-                - since wordpic doesnt intend to take in dimensions, all placement must be done in a logical space, which will then be mapped to a canvas' viewport.
-                - to support &f3, the default output has to be "enriched source", ie same as input, but with position and size attributes.
+                - transforming to the output format.
+              - the placement algorithm. we need to place objects in as per the input, making "educated decisions" about unmentioned constraints. The algorithm to date is below.
+                    - Default positions until a relation orders otherwise.
+                    - Unary size ops, and binary relative placement ops. This came as a result of experience with ambiguous "X is bigger than Y" constructs. Now there is just "X is bigger", which implies that X is bigger than the "normal size", which is determined by wordpic.
+                    - Already placed objects will not move, new ones will be placed wrt the old ones. This is to ensure strict placement.
+                    - Placement in case of "already filled neighbor" will be "next best place in direction required"
+                    - After all relations are executed, if some objects still remain unplaced, they will be placed using same rule as above with the neighbor being the one above them in document order
+              - the sizing algorithm. Since wordpic doesnt intend to take in dimensions, all placement must be done in a logical space, which will then be mapped to a canvas' viewport; as below.
+                  - Logical placement will be in a unitless row & column discrete space, which will then be map to the physical space using the size and pages attributes mentioned above.
+                  - after all objects are placed per the input, the whole picture will be sized and shifted to the origin so that it resembles typical viewport geometry.
               - a launch-neutral api for the pipeline.
             building:
-              - object_creation: a step that creates the basic objects
+              - parser: a parser to read the input file and convert to a json AST - OMETAJS PROTOTYPE DONE
+              - object_creation: a step that walks the AST and creates the objects specified in the input.
               - placement: a step that places the objects as per the relations given on the logical space
+              - normalize: a step that essentially shifts the whole picture such that its top left corner is at (0,0)
               - render: a step that renders objects onto a logical space that uses unitless numbers and has 1-1 correspondence with the output Coord System. Outputs a wordpic document with the physical syntax.
-              - callbacks: each step in the pipeline will allow the previous step to act on intermediate results as soon as a "unit" of output has been created via these. 
             realizing-architecture:
+              - parser leads_to object_creation
               - object_creation leads_to placement
-              - placement leads_to render
-              - object_creation calls callback
-              - object_creation calls callbacks
-              - placement calls callbacks
-              - render calls callbacks
-
-
-# this should be level 2 detail. move here temporarily.
-            - the relation between the logical and physical spaces - DONE
-            - the interaction between logical and physical primitives - DONE
-              - and params required to logically place it.
-              - logical placement will be in row & column discrete space, which will then map to the physical space.
-              - unary size ops, and binary relative placement ops. already placed objects will not move, new ones will be placed wrt the old ones.
-              - placement in case of "already filled neighbor" will be "next best place in direction required"
-              - after all relations are executed, if some objects still remain unplaced, they will be placed using same rule as above with the neighbor being the one above them in document order 
-
-            - logical_renderer: to process the AST and convert it into a logical grid of objects 
-            - physical_renderer: to process the logical grid and convert them into physically drawn objects
-            - parser: a parser to read the input file and convert to a json AST - OMETAJS PROTOTYPE DONE
-
-              - parse: [parser]
-              - logical: [logical_processor, logical_processor_callback]
-              - physical: [physical_processor, physical_processor_callback]
+              - placement leads_to normalize
+              - normalize leads_to render

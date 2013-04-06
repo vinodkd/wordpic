@@ -1,0 +1,11 @@
+digraph G{
+        node[shape=box style="rounded,filled" fontname=Sans fillcolor="#ccccff"]  //i'm terrible partial to to perrywinkle blue ;)
+        //compound=true
+        //rankdir=LR
+        //outputMode=nodesfirst
+        
+    dispatcher -> draw_fn [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+    draw_fn -> object_draw_fn [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+}

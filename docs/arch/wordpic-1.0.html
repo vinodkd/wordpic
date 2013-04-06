@@ -1,0 +1,310 @@
+
+<html>
+  <head>
+    <title>Sid spec for wordpic - a graphviz-style tool for diagramming. v 1.0</title>
+    <link rel="stylesheet" type="text/css" href="sid.css"/>
+  </head>
+  <body>
+    <div class="banner">
+      <span class="sidtext">Sid spec for </span> <span class="appname">wordpic - a graphviz-style tool for diagramming. v 1.0 </span>
+    </div>
+    <div class="spec">
+      <div class="sidheader">
+        <span class="sidtext">To build </span> <span "apptext">wordpic - a graphviz-style tool for diagramming. v 1.0</span>
+      </div>
+      <div class="sidbody">
+        <div class="features">
+  <div class="sidheader">
+    <span class="sidtext">with features:</span>
+  </div>
+  <div class="sidbody">
+
+    <div class='feature'>ability to describe pictures/diagrams in a near-graphviz style</div>
+    <div class='feature'>abilty to render the picture/diagram in various formats</div>
+    <div class='feature'>specifically, the ability to output in "enriched source" format a la Graphviz</div>
+    <div class='feature'>ability to render on an html5 canvas</div>
+  </div>
+  </div>
+  
+        <div class="capabilities">
+  <div class="sidheader">
+    <span class="sidtext">with capabilities:</span>
+  </div>
+  <div class="sidbody">
+
+    <div class='capability'>to run as a command line tool similar to dot</div>
+    <div class='capability'>to run online from within a browser</div>
+    <div class='capability'>to run from a nodejs server</div>
+</div>
+  </div>
+
+        <div class="requires">
+  <div class="sidheader">
+    <span class="sidtext">Requires:</span>
+  </div>
+  <div class="sidbody">
+  <div class="using">
+    <div class="sidheader">
+      <span class="sidtext">using:</span>
+      </div>
+      <div class="sidbody">
+
+    <div class="existing_component">
+        <span class="sidname">os :</span>
+        <span class="siddesc">any</span>
+    </div>
+    <div class="existing_component">
+        <span class="sidname">language :</span>
+        <span class="siddesc">javascript</span>
+    </div>
+  
+  </div>
+</div>
+
+    
+  <div class="defining">
+    <div class="sidheader">
+      <span class="sidtext">defining:</span>
+      </div>
+      <div class="sidbody">
+      
+        <div class="dtask">the declarative input syntax - PARTIALLY DONE. The end state of the syntax is in idea.md, but test/wordpic-demo.html represents the working version. Early iterations have resulted in drastic changes in syntax.</div>
+    
+        <div class="dtask">the imperative output syntax - PARTIALLY DONE. Again, the principles of the end state are in idea.md, but notes.txt has the direct reference to the output syntax refered in &f3.</div>
+    
+        <div class="dtask">the primitives available in the canvas_renderer - PARTIALLY DONE. Again, this is spread across idea.md, scratch/test.html and notes.txt.</div>
+    
+        <div class="dtask">the render pipeline - PARTIALLY DONE.</div>
+    
+    </div>
+  </div>
+
+    
+  <div class="building">
+    <div class="sidheader">
+      <span class="sidtext">building:</span>
+      </div>
+      <div class="sidbody">
+    <div class="new_component">
+        <a class="sidlink" href="#webwrapper"><span class="sidname">webwrapper</span></a> : 
+        <span class="siddesc">to wrap wordpic such that it's callable from a web page</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#canvas_renderer"><span class="sidname">canvas_renderer</span></a> : 
+        <span class="siddesc">to take the output of render_pipeline and convert it into physically drawn objects on a canvas</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#render_pipeline"><span class="sidname">render_pipeline</span></a> : 
+        <span class="siddesc">to process the input source and convert it into "enriched source" form.</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#commandlinewrapper"><span class="sidname">commandlinewrapper</span></a> : 
+        <span class="siddesc">to wrap wordpic such that it's callable from the command line</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#nodejswrapper"><span class="sidname">nodejswrapper</span></a> : 
+        <span class="siddesc">to wrap wordpic such that it's calllable as a nodejs service</span>
+      </div>
+  
+  </div>
+  </div>
+
+    
+  
+</div>
+</div>
+<div class="arch">
+    <div class="sidheader">
+      <span class="sidtext">to realize the architecture:</span>
+      </div>
+      <div class="sidbody">
+  <img class="archimg" src="wordpic-1_root.png"/>
+  </div>
+</div>
+	  <div class="to_build_children">
+    <div class="sidheader">
+      <span id="webwrapper">webwrapper</span>
+    </div>
+    <div class="sidbody">
+    
+      <div><div class="requires">
+  <div class="sidheader">
+    <span class="sidtext">Requires:</span>
+  </div>
+  <div class="sidbody">
+  <div class="building">
+    <div class="sidheader">
+      <span class="sidtext">building:</span>
+      </div>
+      <div class="sidbody">
+    <div class="new_component">
+        <a class="sidlink" href="#html_shell"><span class="sidname">html_shell</span></a> : 
+        <span class="siddesc">that houses the glue js and allows for the render pipeline to be called with some input.</span>
+      </div>
+  
+  </div>
+  </div>
+
+    
+  
+</div>
+</div>
+</div>
+    
+    </div>
+  </div>
+  <div class="to_build_children">
+    <div class="sidheader">
+      <span id="canvas_renderer">canvas_renderer</span>
+    </div>
+    <div class="sidbody">
+    
+      <div><div class="requires">
+  <div class="sidheader">
+    <span class="sidtext">Requires:</span>
+  </div>
+  <div class="sidbody">
+  <div class="defining">
+    <div class="sidheader">
+      <span class="sidtext">defining:</span>
+      </div>
+      <div class="sidbody">
+      
+        <div class="dtask">the primitives that wordpic supports and how they map to the canvas' primitives. PARTIALLY DONE. - logical primitives will support attributes required to phsycially draw it; eg, a box will have an origin and sizes of sides, a circle will have a center and a radius and so on. - exact list of primitives supported TBD. Partial list in idea.md and notes.txt.</div>
+    
+        <div class="dtask">how wordpic's sizes map to the canvas' size and viewport - PARTIALLY DONE. - logical syntax will support a size attr that defines the size of the output space in unitless numbers, but which are in 1-1 correspondence with the physical coord system - and a spread param which is a row x col spec for the number of "pages" the output should be spread into.</div>
+    
+    </div>
+  </div>
+
+    
+  <div class="building">
+    <div class="sidheader">
+      <span class="sidtext">building:</span>
+      </div>
+      <div class="sidbody">
+    <div class="new_component">
+        <a class="sidlink" href="#dispatcher"><span class="sidname">dispatcher</span></a> : 
+        <span class="siddesc">code that routes to the draw function</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#draw_fn"><span class="sidname">draw_fn</span></a> : 
+        <span class="siddesc">code that knows how to draw generically</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#object_draw_fn"><span class="sidname">object_draw_fn</span></a> : 
+        <span class="siddesc">code that draws a specific object</span>
+      </div>
+  
+  </div>
+  </div>
+
+    
+  
+</div>
+</div>
+<div class="arch">
+    <div class="sidheader">
+      <span class="sidtext">to realize the architecture:</span>
+      </div>
+      <div class="sidbody">
+  <img class="archimg" src="wordpic-1_canvas_renderer.png"/>
+  </div>
+</div>
+</div>
+    
+    </div>
+  </div>
+  <div class="to_build_children">
+    <div class="sidheader">
+      <span id="render_pipeline">render_pipeline</span>
+    </div>
+    <div class="sidbody">
+    
+      <div><div class="requires">
+  <div class="sidheader">
+    <span class="sidtext">Requires:</span>
+  </div>
+  <div class="sidbody">
+  <div class="defining">
+    <div class="sidheader">
+      <span class="sidtext">defining:</span>
+      </div>
+      <div class="sidbody">
+      
+        <div class="dtask">a pipeline of tasks to create the objects, place them per the rules and render them - DONE - parse the source, generating an AST. - process the AST, creating objects as they are declared and placing them. - transforming to the output format.</div>
+    
+        <div class="dtask">the placement algorithm. we need to place objects in as per the input, making "educated decisions" about unmentioned constraints. The algorithm to date is below. - Default positions until a relation orders otherwise. - Unary size ops, and binary relative placement ops. This came as a result of experience with ambiguous "X is bigger than Y" constructs. Now there is just "X is bigger", which implies that X is bigger than the "normal size", which is determined by wordpic. - Already placed objects will not move, new ones will be placed wrt the old ones. This is to ensure strict placement. - Placement in case of "already filled neighbor" will be "next best place in direction required" - After all relations are executed, if some objects still remain unplaced, they will be placed using same rule as above with the neighbor being the one above them in document order</div>
+    
+        <div class="dtask">the sizing algorithm. Since wordpic doesnt intend to take in dimensions, all placement must be done in a logical space, which will then be mapped to a canvas' viewport; as below. - Logical placement will be in a unitless row & column discrete space, which will then be map to the physical space using the size and pages attributes mentioned above. - after all objects are placed per the input, the whole picture will be sized and shifted to the origin so that it resembles typical viewport geometry.</div>
+    
+        <div class="dtask">a launch-neutral api for the pipeline.</div>
+    
+    </div>
+  </div>
+
+    
+  
+  <div class="building">
+    <div class="sidheader">
+      <span class="sidtext">building:</span>
+      </div>
+      <div class="sidbody">
+    <div class="new_component">
+        <a class="sidlink" href="#parser"><span class="sidname">parser</span></a> : 
+        <span class="siddesc">a parser to read the input file and convert to a json AST - OMETAJS PROTOTYPE DONE</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#object_creation"><span class="sidname">object_creation</span></a> : 
+        <span class="siddesc">a step that walks the AST and creates the objects specified in the input.</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#placement"><span class="sidname">placement</span></a> : 
+        <span class="siddesc">a step that places the objects as per the relations given on the logical space</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#normalize"><span class="sidname">normalize</span></a> : 
+        <span class="siddesc">a step that essentially shifts the whole picture such that its top left corner is at (0,0)</span>
+      </div>
+    <div class="new_component">
+        <a class="sidlink" href="#render"><span class="sidname">render</span></a> : 
+        <span class="siddesc">a step that renders objects onto a logical space that uses unitless numbers and has 1-1 correspondence with the output Coord System. Outputs a wordpic document with the physical syntax.</span>
+      </div>
+  
+  </div>
+  </div>
+
+    
+  
+</div>
+</div>
+</div>
+    
+    </div>
+  </div>
+  <div class="to_build_children">
+    <div class="sidheader">
+      <span id="suggestion">suggestion</span>
+    </div>
+    <div class="sidbody">
+    
+      <div class='suggestion'>nodejswrapper is declared, but not defined. Do you want to?</div>
+    
+    </div>
+  </div>
+  <div class="to_build_children">
+    <div class="sidheader">
+      <span id="suggestion">suggestion</span>
+    </div>
+    <div class="sidbody">
+    
+      <div class='suggestion'>commandlinewrapper is declared, but not defined. Do you want to?</div>
+    
+    </div>
+  </div>
+
+  
+      </div>
+    </div>
+  </body>
+</html>

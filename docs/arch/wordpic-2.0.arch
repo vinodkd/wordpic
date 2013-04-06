@@ -1,0 +1,32 @@
+to-build: &wordpic
+    name: wordpic - a graphviz-style tool for diagramming.
+    version: 2.0
+    with-features:
+        - &f1 batch vs stream mode of processing the rendering pipeline 
+    and-capabilities:
+        - &nf1 TBD
+    requires:
+        using:
+            - os: any
+            - language: javascript
+        defining:
+            - how to do this incrementally (if possible) - DONE; using callbacks
+        building:
+            - callbacks: each step in the pipeline will allow the previous step to act on intermediate results as soon as a "unit" of output has been created via these. 
+    realizing-architecture:
+            layers:
+              - run: [commandlinewrapper, nodejswrapper, webwrapper]
+              - render: [physical_renderer, physical_renderer_callback]
+              - parse: [parser, parser_callback]
+              - logical: [logical_processor, logical_processor_callback]
+              - physical: [physical_processor, physical_processor_callback]
+            relations: 
+              - commandlinewrapper calls physical_renderer
+              - nodejswrapper calls physical_renderer
+              - webwrapper calls physical_renderer
+              - physical_renderer calls parser
+              - parser calls logical_processor
+              - logical_processor calls physical_processor
+              - parser_callback calls physical_renderer_callback
+              - logical_processor_callback calls parser_callback
+              - physical_processor_callback calls logical_processor_callback 

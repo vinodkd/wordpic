@@ -1,0 +1,41 @@
+digraph G{
+        node[shape=box style="rounded,filled" fontname=Sans fillcolor="#ccccff"]  //i'm terrible partial to to perrywinkle blue ;)
+        //compound=true
+        //rankdir=LR
+        //outputMode=nodesfirst
+        
+        //node[colorscheme=spectral3]
+        {
+          node [shape=plaintext]
+          edge [style=invis]
+        
+        display -> run -> render
+        }
+        
+        {
+          node[fillcolor="#8b48eebb"]
+          // layer name's color needs to be overridden here else the top level color will inherit.
+          rank=same;display[color=none fontcolor="#8b48eebb" fillcolor=none];webwrapper;canvas_renderer
+        };
+        
+        {
+          node[fillcolor="#230707bb"]
+          // layer name's color needs to be overridden here else the top level color will inherit.
+          rank=same;run[color=none fontcolor="#230707bb" fillcolor=none];commandlinewrapper;nodejswrapper
+        };
+        
+        {
+          node[fillcolor="#a4a908bb"]
+          // layer name's color needs to be overridden here else the top level color will inherit.
+          rank=same;render[color=none fontcolor="#a4a908bb" fillcolor=none];render_pipeline
+        };
+        
+    webwrapper -> canvas_renderer [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+    canvas_renderer -> render_pipeline [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+    commandlinewrapper -> render_pipeline [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+    nodejswrapper -> render_pipeline [label="calls",color=gray, fontname=Sans fontsize="10"]
+      
+}
