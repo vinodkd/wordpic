@@ -3,6 +3,94 @@
   <script type="application/javascript" src="../lib/wordpic.js"></script>
   <script type="application/javascript" src="../lib/wordpic-primitives.js"></script>
   <script type="application/javascript" src="../lib/wordpic-out-canvas.js"></script>
+
+  <script src="../lib/ometa-js/prototype.js"></script>
+  <script src="../lib/ometa-js/lib.js"></script>
+  <script src="../lib/ometa-js/ometa-base.js"></script>
+  <script src="../lib/ometa-js/parser.js"></script>
+  <script src="../lib/ometa-js/bs-js-compiler.js"></script>
+  <script src="../lib/ometa-js/bs-ometa-compiler.js"></script>
+  <script src="../lib/ometa-js/bs-ometa-optimizer.js"></script>
+  <script src="../lib/ometa-js/bs-ometa-js-compiler.js"></script>
+
+  <script type="text/x-ometa-js">
+    // see hard-earned-gyaan.txt for all the work that went into getting this to work.
+
+    ometa WordpicScanner {
+      wordpic = ("picture" | "diagram") name:n "{" statements:s "}"         -> [`wordpic,n,s],
+      name = text,
+      statements = statement+,
+
+      statement = shape | simple_statement,
+      shape = ("object" | "shape" | "symbol") name:name "{" body:body "}"     -> [`shape,name,body],
+      simple_statement = instance | relation,
+
+      body = simple_statement+,
+
+      // docs dont talk about the ? operator, mail archive does: http://vpri.org/pipermail/ometa/2010-April/000242.html
+      instance = (name:n ":")? type:typ attrs?:attrs      -> [`instance, typ, n, [`attrs, attrs]],
+      relation = name:opd1 opr:op name:opd2               -> [op, opd1, opd2],
+      
+      type =  "box"     | "square"  | "rect" 
+            | "circle"  | "oval"    | "arc"   | "line" 
+            | "image" 
+            | "point"   | "link"    | 
+              nqstring,
+      attrs = "[" listOf('nvpair',","):attrs "]"              -> attrs,
+
+      opr = "is"? ("above" | "below" | "left" | "right"
+             // order very imp here. north will not be recognized if placed after n.
+             // |||ly south and s, southwest and south and sw and s
+            
+             | "northeast" | "northwest" | "southwest" | "southeast" 
+             | "north"  | "south" | "east" | "west" 
+             | "nw" | "ne" | "se" | "sw"
+             | "n" | "s" | "e" | "w"  
+             |">" | "<" | "smaller" | "bigger"
+             |">>" | "<<" | "much smaller" | "much bigger"
+            ):op  ("of" | "to" | "than")?                     -> op,
+      nvpair = nqstring:name "=" text:value                   -> [`attr,name, value],
+
+      text = spaces (qstring | nqstring):s                    ->s,
+      
+      //this takes care of comments too. copied from bs-ometa-compiler.txt
+      space = ^space |fromTo('//','\n') | fromTo('/*','*/'), 
+      
+      qstring = fromTo('"','"'),
+      nqstring = ('_' | '.' | letterOrDigit)+:ls              -> (ls.join(''))
+    }
+
+    // added handy debugging tool from here:http://vpri.org/pipermail/ometa/2010-May/000281.html
+    // the sample below can currently be broken by adding a non-letter, non-digit char to any text to see this in action.
+
+    matchFailed = function (grammar, errorPos) {
+      var lines = grammar.input.lst.split('\n');
+      var pos = 0, l = 0;
+      var msg = ["Execution error: input matching failed at position: " + errorPos];
+
+      while (pos < errorPos) {
+        var line = lines[l], length = line.length;
+        if (pos + length >= errorPos) {
+          var c = errorPos - pos;
+          msg.push("  line:" + (l + 1) + ", column:" + c);
+          msg.push(line)
+          // replicate str n times
+          function replicate(str, n) {
+            if (n < 1) return "";
+            var t = [];
+            for (var i=0; i<n; i++) t.push(str);
+            return t.join('');
+          }
+          msg.push(replicate('-', c) + '^');
+        }
+        pos += length + 1;
+        l++;
+      }
+      alert(msg.join('\n'));
+    }
+
+  </script>
+
   <script type="application/javascript">
   var source, canvas, wordpic;
   function init(){
@@ -12,7 +100,7 @@
   }
   
   function go(){
-    wpCanvas.render(source,canvas);
+    wpCanvas.render(source.value,canvas);
     return false;
   }
   </script>
@@ -51,13 +139,13 @@
         <form>
             <textarea id="source">
 picture ide{
-  windowtitle : box[color='blue']
-  menu        : box[color='grey']
-  toolbar     : box[color='grey']
-  filetree    : box[color='yellow']
-  editor      : box[color='white']
-  properties  : box[color='white']
-  statusbar   : box[color='grey']
+  windowtitle : box[color=blue]
+  menu        : box[color=grey]
+  toolbar     : box[color=grey]
+  filetree    : box[color=yellow]
+  editor      : box[color=white]
+  properties  : box[color=red]
+  statusbar   : box[color=yellow]
 
   windowtitle above menu
   menu above toolbar
@@ -66,7 +154,7 @@ picture ide{
   properties right of editor
   statusbar below filetree
 
-  editor is bigger
+//  editor is bigger
 }
             </textarea>
             <p><input id="gobutton" type="button" value="Go &rarr;" onclick="go();"/></p>
@@ -78,4 +166,5 @@ picture ide{
       </span>
   </div>
  </body>  
+<script src="../lib/ometa-js/ometa-script-tag.js"></script>
 </html> 

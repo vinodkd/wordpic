@@ -28,3 +28,5 @@ Sun Apr  7 15:35:51 2013: Decided to make the conversion from r,c to x,y have th
 Sun Apr  7 21:34:42 2013: Converted the decision above to 32 pixels for demo purposes.
 
 Sun Apr  7 23:03:52 2013: Had to switch to 25 px cos strokes were showing up blury. After a lot of google searches, have currently settled for the approach of shifting the context by 0.5,0.5 before drawing anything. The reason for the blurry is [explained well](https://developer.mozilla.org/en-US/docs/HTML/Canvas/Tutorial/Applying_styles_and_colors). From my experience with test.html and some stackoverflower's comment it seemed like setting pixel values when he goes up, he's ok. I tried that and it does seem to work; but i'd rather not have that constraint of setting the canvas before it starts. So am currently going with the approach in [another SO thread](http://stackoverflow.com/a/3279863)
+
+Mon Apr  8 01:17:10 2013 : integrated the ometa-js parser written in wp.ometa into demo.html. however, the output from WPScanner is essentially a parse tree. it needs to be converted to a "cooked" form before the rest of wordpic.js can use it. That is the next task. Enough work for one weekend.
