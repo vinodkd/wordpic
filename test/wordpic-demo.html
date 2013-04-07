@@ -17,9 +17,13 @@
   }
   </script>
   <style type="text/css" media="screen">
-    * {
+    html, head, body, .table, .row {
+      width: 99%;
+      height: 98%;
+    }
+
+    body {
       font-family:Verdana;
-      width:98%;
     }
     
     span.col1,span.col2 { width:50%;}
@@ -29,11 +33,10 @@
     
     #source, #canvas {
       border:1px black solid;
-      width:99%; 
     }    
 
-    #source { height:70%; }
-    #canvas { height:68%; }
+    #source { width:99%;height:70%; }
+    #canvas { width:99%;height:70%; }
     
     #gobutton {width:10%;float:right;}
   </style>
