@@ -1,12 +1,15 @@
-- update readme.md to better represent an overview of the project
-- update arch file for components
-- create basic web stack
-  - fixture html with textarea for input and canvas for output
-  - wordpic.js lib imported to the fixture
-    - parse
-    - create
-    - place
-    - render
+- [x] update readme.md to better represent an overview of the project
+- [X] update arch file for components
+- [ ] consolidate design in one place.
+- [ ] create basic web stack
+  - [X] fixture html with textarea for input and canvas for output
+  - [ ] wordpic.js lib imported to the fixture
+    - [ ] parse
+      - [ ] get current parse logic to work with web stack.
+      - [ ] import my fork of ometa-js as a dep
+    - [x] create
+    - [x] place
+    - [x] render
 - abstract out command line stack
 - abstract out nodejs stack
 - create compelling sample wordpics
